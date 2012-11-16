@@ -1,5 +1,9 @@
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.ServerSocket;
+import java.io.*;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -48,8 +52,16 @@ public class Start extends JFrame {
 
 		postButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
+
+				try{
+					Socket client = new Socket(InetAddress.getByName(null), 1234);
+					OutputStream os = client.getOutputStream();
+					os.write(postText.getText().getBytes());
+					client.close();
+				}catch(Exception e){}
+
 				/* Ajoute le statut */
-				JLabel label = new JLabel("new status " + postText.getText());
+				JLabel label = new JLabel("new status > " + postText.getText());
 				postText.setText("");
 				me.add(label);
 				/* Et redessine */
@@ -112,10 +124,11 @@ public class Start extends JFrame {
 
 		/* Récupérer la liste des statuts de l'ami */
 		try {
-			Socket client = new Socket("localhost", 1234);
-			OutputStream os = client.getOutputStream();
-			InputStream is = client.getInputStream();
+			ServerSocket ecoute = new ServerSocket(1234);
+			Socket service = ecoute.accept();
+			InputStream is = service.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
+			PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(service.getOutputStream())), true);
 			while(true) {
 				try {
 					/* Recevoir un évènement */
@@ -124,14 +137,14 @@ public class Start extends JFrame {
 					him.add(new JLabel(line));
 					panel.validate();
 				} catch (Exception e) {
-					client.close();
+					service.close();
 				}
 			}
-		} catch (Exception e) {
-			// tant pis !
-		}
+//			service.close();
+//			ecoute.close();
+		} catch (Exception e) {	}
 
-                /* TODO: établir aussi la socket d'écoute, pour que les autres
-                 * puissent se connecter à nous ! */
+		/* TODO: établir aussi la socket d'écoute, pour que les autres
+		 * puissent se connecter à nous ! */
 	}
 }
