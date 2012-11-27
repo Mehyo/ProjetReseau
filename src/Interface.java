@@ -44,6 +44,7 @@ public class Interface extends JFrame {
 		postText.setMaximumSize(new Dimension(Integer.MAX_VALUE, postText.getMinimumSize().height));
 		panel.add(postText);
 		JButton postButton = new JButton("Post");
+		JButton friendButton = new JButton("Add Friend");
 
 		postButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -56,9 +57,17 @@ public class Interface extends JFrame {
 				panel.validate();
 			}
 		});
-
+		
+		friendButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				/*Ajoute ami */
+			}
+		});
+		
 		postButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+		friendButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panel.add(postButton);
+		panel.add(friendButton);
 
 		/* Un panel horizontal pour les gens */
 		JPanel people = new JPanel();
