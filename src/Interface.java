@@ -49,7 +49,7 @@ public class Interface extends JFrame {
 			public void actionPerformed(ActionEvent event) {
 				/* Ajoute le statut */
 				JLabel label = new JLabel("New status > " + postText.getText());
-				Start.postStatus(postText.getText());
+				Serveur.postStatus(postText.getText());
 				postText.setText("");
 				me.add(label);
 				/* Et redessine */
