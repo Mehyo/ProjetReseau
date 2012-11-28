@@ -4,6 +4,10 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Calendar;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,7 +30,7 @@ public class Interface extends JFrame {
 	}
 
 	public void himStatus(String status){
-		JLabel label = new JLabel("New status > " + status);
+		JLabel label = new JLabel(status);
 		him.add(label);
 		panel.revalidate();
 	}
@@ -44,12 +48,16 @@ public class Interface extends JFrame {
 		postText.setMaximumSize(new Dimension(Integer.MAX_VALUE, postText.getMinimumSize().height));
 		panel.add(postText);
 		JButton postButton = new JButton("Post");
+		getRootPane().setDefaultButton(postButton);
 
 		postButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				/* Ajoute le statut */
-				JLabel label = new JLabel("New status > " + postText.getText());
-				Serveur.postStatus(postText.getText());
+				DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+				Date date = new Date();
+				String status = "[" + dateFormat.format(date) +"]"+ System.getProperty("user.name")+"> " + postText.getText();
+				JLabel label = new JLabel(status);
+				Serveur.postStatus(status);
 				postText.setText("");
 				me.add(label);
 				/* Et redessine */

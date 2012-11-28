@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.io.*;
 
-public class Serveur extends Main{
+public class Serveur extends Main  {
 
 	public static final int port = 5234;
 	private String newStatus;
@@ -29,17 +29,11 @@ public class Serveur extends Main{
 	}
 
 	public static void postStatus (String status){
-		Socket s;
+		String data = "10" + status;
 		try{
 			for (int i = 0; i < nb; i++)
 			{
-				s = new Socket(address[i], port);
-				OutputStream os = s.getOutputStream();
-				PrintStream ps = new PrintStream(os, false, "utf-8");
-				ps.println(status);
-				ps.flush();
-				ps.close();
-				s.close();
+				createSocket(address[i],data);
 			}
 		}catch (Exception e){}
 	}
@@ -81,7 +75,7 @@ public class Serveur extends Main{
 
 						}
 						else {
-							readStatus(bb);
+							analyseData(bb);
 							key.cancel();
 						}
 					}
@@ -92,17 +86,95 @@ public class Serveur extends Main{
 	}
 
 
-	public String readStatus (ByteBuffer bb){
-		try{
-			byte[] buff = new byte[bb.remaining()];
-			bb.get(buff);
-			String newStatus = new String(buff);
-			printStatus(newStatus);
+	public void analyseData(ByteBuffer bb){
+		byte[] buff = new byte[bb.remaining()];
+		bb.get(buff);
+		String receiveData = new String(buff);
 
-		}catch (Exception e){}
-		return newStatus;
+		String so1 = receiveData.substring(0, 1);
+		int o1 = Integer.parseInt(so1);
+		switch(o1){
+		case 1 :
+			newStatus = receiveData.substring(2);
+			printStatus(newStatus);
+			break;
+		case 2 :
+			String so2 = receiveData.substring(1, 2);
+			int o2 = Integer.parseInt(so2);
+			switch(o2){
+			case 0 :
+				//Demande d'amis
+				break;
+			case 1 :
+				//Réponse amis + envoi liste d'amis + status
+				break;
+			case 2 :
+				//Demande liste d'amis
+				break;
+			}
+			break;
+		case 3 :
+			char o3 = receiveData.charAt(1);
+			switch(o3){
+			case 0 :
+				//Demande status
+				break;
+			case 2 :
+				//Envoi status
+				break;
+			}
+			break;
+		case 4 :
+			//commentaire
+			break;
+		case 5 :
+			//Image
+			break;	
+		}
 	}
 
+	private static void createSocket(InetAddress address, String data){
+		try{
+			Socket s = new Socket(address, port);
+			OutputStream os = s.getOutputStream();
+			PrintStream ps = new PrintStream(os, false, "utf-8");
+			ps.println(data);
+			ps.flush();
+			ps.close();
+			s.close();
+		}catch (Exception e){}
+	}
+	
+//	private void friendsRequest(InetAddress address){
+//		createSocket(address, "20");
+//	}
+//	
+//	private void friendsConfirm(InetAddress address){
+//		createSocket(address, "21");
+//	}
+//	
+//	private void friendsListRequest(InetAddress address){
+//		createSocket(address, "22");
+//	}
+//	
+//	private void friendsStatusRequest(InetAddress address){
+//		createSocket(address, "30");
+//	}
+//	
+//	private void friendsStatusList(InetAddress address){
+//		createSocket(address, "31");
+//	}
+//	
+//	private void friendsCommentary(InetAddress address){
+//		createSocket(address, "40");
+//	}
+//	
+//	private void friendsImage(InetAddress address){
+//		createSocket(address, "50");
+//	}
+	
+	
+	
 	public void printStatus(String newStatus){
 		ex.himStatus(newStatus);
 	}
