@@ -145,33 +145,35 @@ public class Serveur extends Main  {
 		}catch (Exception e){}
 	}
 	
-//	private void friendsRequest(InetAddress address){
-//		createSocket(address, "20");
-//	}
-//	
-//	private void friendsConfirm(InetAddress address){
-//		createSocket(address, "21");
-//	}
-//	
-//	private void friendsListRequest(InetAddress address){
-//		createSocket(address, "22");
-//	}
-//	
-//	private void friendsStatusRequest(InetAddress address){
-//		createSocket(address, "30");
-//	}
-//	
-//	private void friendsStatusList(InetAddress address){
-//		createSocket(address, "31");
-//	}
-//	
-//	private void friendsCommentary(InetAddress address){
-//		createSocket(address, "40");
-//	}
-//	
-//	private void friendsImage(InetAddress address){
-//		createSocket(address, "50");
-//	}
+	private void friendsRequest(InetAddress address){
+		String data = "20" + System.getProperty("user.name");
+		createSocket(address, data);
+	}
+	
+	private void friendsConfirm(InetAddress address){
+		String data = "21" + System.getProperty("user.name");
+		createSocket(address, data);
+	}
+	
+	private void friendsListRequest(InetAddress address){
+		createSocket(address, "22");
+	}
+	
+	private void friendsStatusRequest(InetAddress address){
+		createSocket(address, "30");
+	}
+	
+	private void friendsStatusList(InetAddress address){
+		createSocket(address, "31");
+	}
+	
+	private void friendsCommentary(InetAddress address){
+		createSocket(address, "40");
+	}
+	
+	private void friendsImage(InetAddress address){
+		createSocket(address, "50");
+	}
 	
 	
 	
