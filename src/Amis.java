@@ -18,8 +18,10 @@ public class Amis{
     public urlAmi(){
     	return this.url;
     }
+    
     public String toString(){
     	return "(" + this.nom + "," + this.url +")";
     }
-    /**/
+    
+    
 }
