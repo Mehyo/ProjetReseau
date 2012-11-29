@@ -1,7 +1,7 @@
 public class Accept{
 	
-	public verifier(String url){
-		if(url appartiens fichier.xml)
+	public verify(String host){
+		if(host appartiens fichier.xml)
 			accept();
 		else
 			message();
