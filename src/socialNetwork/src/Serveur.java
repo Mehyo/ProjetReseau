@@ -1,3 +1,5 @@
+package socialNetwork.src;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -14,7 +16,10 @@ import java.util.Iterator;
 import java.util.Set;
 import java.io.*;
 
-public class Serveur extends Main  {
+import socialNetwork.Main;
+import socialNetwork.ui.Interface;
+
+public class Serveur {
 
 	public static final int port = 5234;
 	private String newStatus;
@@ -31,9 +36,12 @@ public class Serveur extends Main  {
 	public static void postStatus (String status){
 		String data = "10" + status;
 		try{
-			for (int i = 0; i < nb; i++)
-			{
-				createSocket(address[i],data);
+			for (int i = 0; i < Main.friendList.length; i++){
+				Friends friend = Main.friendList[i];
+				String friendAddress = friend.hostFriend();
+				InetAddress address = InetAddress.getByName(friendAddress); 
+				System.out.println(data);
+				createSocket(address,data);
 			}
 		}catch (Exception e){}
 	}

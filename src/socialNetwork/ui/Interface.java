@@ -1,3 +1,5 @@
+package socialNetwork.ui;
+
 import java.awt.GridLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -19,6 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+
+import socialNetwork.src.Serveur;
 
 public class Interface extends JFrame {
 
@@ -49,6 +53,7 @@ public class Interface extends JFrame {
 		panel.add(postText);
 		JButton postButton = new JButton("Post");
 		JButton friendButton = new JButton("Add Friend");
+		getRootPane().setDefaultButton(postButton);
 		
 		postButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
