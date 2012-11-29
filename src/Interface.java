@@ -48,12 +48,8 @@ public class Interface extends JFrame {
 		postText.setMaximumSize(new Dimension(Integer.MAX_VALUE, postText.getMinimumSize().height));
 		panel.add(postText);
 		JButton postButton = new JButton("Post");
-<<<<<<< HEAD
 		JButton friendButton = new JButton("Add Friend");
-=======
-		getRootPane().setDefaultButton(postButton);
->>>>>>> f835394dc806984bae3f695c60c17bf23c1912ca
-
+		
 		postButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				/* Ajoute le statut */
