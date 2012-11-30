@@ -106,7 +106,7 @@ public class Serveur {
 			int o2 = Integer.parseInt(so2);
 			switch(o2){
 			case 0 :
-				//Demande d'amis
+				Friends.analyseFriendsRequest(receiveData.substring(2));
 				break;
 			case 1 :
 				//Réponse amis + envoi liste d'amis + status
