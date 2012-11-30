@@ -30,7 +30,7 @@ public class XmlTreatment {
 		}
 	}
 	public static void addFriendXML(String name, String host, boolean status){
-		
+		/**/
 	}
 	/*Récupération liste d'amis*/
 	public static ArrayList<Friends> getFriendsXML(){
@@ -50,5 +50,4 @@ public class XmlTreatment {
 		}
 		return listFriends;
 	}
-
 }
