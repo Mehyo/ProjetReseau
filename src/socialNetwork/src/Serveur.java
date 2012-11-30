@@ -33,15 +33,21 @@ public class Serveur {
 		listener();
 	}
 
-	public static void postStatus (String status){
+	public static void post(String status, InetAddress address){
 		String data = "10" + status;
+		createSocket(address,data);
+	}
+
+	public static void postStatus (String status){
 		try{
 			for (int i = 0; i < Main.friendList.length; i++){
 				Friends friend = Main.friendList[i];
-				String friendAddress = friend.hostFriend();
-				InetAddress address = InetAddress.getByName(friendAddress); 
-				System.out.println(data);
-				createSocket(address,data);
+				System.out.println(friend.isMyFriend());
+				if (friend.isMyFriend()==true){
+					String friendAddress = friend.hostFriend();
+					InetAddress address = InetAddress.getByName(friendAddress);
+					post(status, address);
+				}
 			}
 		}catch (Exception e){}
 	}
@@ -103,9 +109,16 @@ public class Serveur {
 		int o1 = Integer.parseInt(so1);
 		switch(o1){
 		case 1 :
-			newStatus = receiveData.substring(2);
-			printStatus(newStatus);
-			break;
+			String so11 = receiveData.substring(1, 2);
+			int o11 = Integer.parseInt(so11);
+			switch(o11){
+			case 0 :
+				newStatus = receiveData.substring(2);
+				printStatus(newStatus);
+				break;
+			case 1 :
+				//envoi commentaire
+			}
 		case 2 :
 			String so2 = receiveData.substring(1, 2);
 			int o2 = Integer.parseInt(so2);
@@ -117,7 +130,13 @@ public class Serveur {
 				//Réponse amis + envoi liste d'amis + status
 				break;
 			case 2 :
+				//Refus
+				break;
+			case 3 :
 				//Demande liste d'amis
+				break;
+			case 4 :
+				//Envoi liste d'amis
 				break;
 			}
 			break;
@@ -152,39 +171,41 @@ public class Serveur {
 			s.close();
 		}catch (Exception e){}
 	}
-	
+
 	private void friendsRequest(InetAddress address){
-		String data = "20" + System.getProperty("user.name");
+		try{
+		String data = "20" + System.getProperty("user.name") + '|' + InetAddress.getLocalHost().toString();
 		createSocket(address, data);
+		}catch(Exception e){}
 	}
-	
+
 	private void friendsConfirm(InetAddress address){
 		String data = "21" + System.getProperty("user.name");
 		createSocket(address, data);
 	}
-	
+
 	private void friendsListRequest(InetAddress address){
 		createSocket(address, "22");
 	}
-	
+
 	private void friendsStatusRequest(InetAddress address){
 		createSocket(address, "30");
 	}
-	
+
 	private void friendsStatusList(InetAddress address){
 		createSocket(address, "31");
 	}
-	
+
 	private void friendsCommentary(InetAddress address){
 		createSocket(address, "40");
 	}
-	
+
 	private void friendsImage(InetAddress address){
 		createSocket(address, "50");
 	}
-	
-	
-	
+
+
+
 	public void printStatus(String newStatus){
 		ex.himStatus(newStatus);
 	}

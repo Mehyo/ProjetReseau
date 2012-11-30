@@ -5,21 +5,21 @@
   <friend>
     <name>amiviell</name>
     <host>localhost</host>
-    <statues>none</statues>
+    <friendStatus>false</friendStatus>
     <picture>none</picture>
   </friend>
 
   <friend>
     <name>scoavoux</name>
     <host>chani</host>
-    <statues> none </statues>
+    <friendStatus>false</friendStatus>
     <picture> none </picture>
   </friend>
 
   <friend>
     <name>ysenel</name>
-    <host>None</host>
-    <statues> none </statues>
+    <host>cezanne</host>
+    <friendStatus>true</friendStatus>
     <picture> none </picture>
   </friend>
 

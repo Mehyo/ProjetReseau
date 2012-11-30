@@ -12,10 +12,16 @@ public class Friends{
 
 	private String name;
 	private String host;
+	private boolean status;
 
-	public Friends(String name, String host){
+	public Friends(String name, String host, String status){
 		this.name = name;
 		this.host = host;
+		System.out.println(status);
+		if(status.compareTo("false") == 0)
+			this.status = false;
+		else
+			this.status = true;
 	}
 
 	public String nameFriend(){
@@ -28,6 +34,20 @@ public class Friends{
 
 	public String toString(){
 		return "(" + this.name + "," + this.host +")";
+	}
+	
+	public boolean isMyFriend(){	
+		return this.status;
+	}
+	
+	public void setToFriend(){
+		this.status = true;
+		//change dans xml
+	}
+	
+	public void setToStranger(){
+		this.status = false;
+		//change dans xml
 	}
 
 	/*Récupération liste d'amis*/
@@ -45,7 +65,7 @@ public class Friends{
 			Node node = nodes.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element element = (Element) node;
-				listFriend[i] = new Friends(getValue("name", element), getValue("host", element));
+				listFriend[i] = new Friends(getValue("name", element), getValue("host", element), getValue("friendStatus", element));
 			}
 		}
 		return listFriend;
