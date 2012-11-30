@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,23 +24,23 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
-import socialNetwork.src.Serveur;
+import socialNetwork.src.Message;
 
 public class Interface extends JFrame {
 
-	static JPanel panel, me, him;
-	static JTextField postText;
+	static JPanel panel, fPanel, me, him;
+	static JTextField postText, friendText;
 
 	public Interface() {
 		initInterface();
 	}
-
+	
 	public void himStatus(String status){
 		JLabel label = new JLabel(status);
 		him.add(label);
 		panel.revalidate();
 	}
-	
+
 	public final void initInterface() {
 		JLabel label;
 
@@ -53,8 +55,8 @@ public class Interface extends JFrame {
 		panel.add(postText);
 		JButton postButton = new JButton("Post");
 		JButton friendButton = new JButton("Add Friend");
-		getRootPane().setDefaultButton(postButton);
-		
+		panel.getRootPane().setDefaultButton(postButton);
+
 		postButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				/* Ajoute le statut */
@@ -62,20 +64,44 @@ public class Interface extends JFrame {
 				Date date = new Date();
 				String status = "[" + dateFormat.format(date) +"]"+ System.getProperty("user.name")+"> " + postText.getText();
 				JLabel label = new JLabel(status);
-				Serveur.postStatus(status);
+				Message.sendStatus(status);
 				postText.setText("");
 				me.add(label);
 				/* Et redessine */
 				panel.validate();
 			}
 		});
-		
+
 		friendButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				/*Ajoute ami */
+			public void actionPerformed(ActionEvent event){
+				fPanel = new JPanel();
+				fPanel.setLayout(new BoxLayout(fPanel, BoxLayout.Y_AXIS));
+				JFrame fFrame = new JFrame("Add Friend");
+				fFrame.getContentPane().add(fPanel);
+				
+				friendText = new JTextField(10);
+				friendText.setMaximumSize(new Dimension(Integer.MAX_VALUE, postText.getMinimumSize().height));
+				fPanel.add(friendText);
+
+				JButton addButton = new JButton("Add");
+				fPanel.add(addButton);
+				fPanel.getRootPane().setDefaultButton(addButton);
+				
+				addButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent event) {
+						/* Ajoute le statut */
+						String address = friendText.getText();
+						try {
+							Message.friendsRequest(InetAddress.getByName(address));
+						} catch (Exception e) {}
+
+					}
+				});
+				fFrame.pack();
+				fFrame.setVisible(true);
 			}
 		});
-		
+
 		postButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 		friendButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panel.add(postButton);
@@ -98,7 +124,7 @@ public class Interface extends JFrame {
 
 		label = new JLabel("Label Noir status");
 		me.add(label);
-		
+
 		/* Une petite séparation entre moi et lui */
 		people.add(Box.createRigidArea(new Dimension(5,0)));
 
@@ -108,7 +134,7 @@ public class Interface extends JFrame {
 		him.setLayout(new BoxLayout(him, BoxLayout.Y_AXIS));
 		him.setAlignmentY(Component.TOP_ALIGNMENT);
 		people.add(him);
-		
+
 		label = new JLabel("Nous status");
 		him.add(label);
 		/* De la place pour les autres */

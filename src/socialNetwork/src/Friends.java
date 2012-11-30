@@ -1,5 +1,7 @@
 package socialNetwork.src;
 
+import socialNetwork.Main;
+
 public class Friends{
 
 	private String name;
@@ -20,7 +22,11 @@ public class Friends{
 		this.host = "";
 		this.status = false;
 	}
-
+	
+	public static void AcceptFriend(String name){	
+		/**/
+	}
+	
 	public void setName(String name){
 		this.name = name;
 	}
@@ -53,5 +59,19 @@ public class Friends{
 	public void setToStranger(){
 		this.status = false;
 		//change dans xml
+	}
+	
+	public static void analyseFriendsRequest(String request){
+		Friends newFriends = new Friends();
+		for(int i=0; i < request.length(); i++){
+			char a = request.charAt(i);
+			if (a ==':'){
+				newFriends.setName(request.substring(0,i-1));
+				newFriends.setHost(request.substring(i+1));
+				break;
+			}			
+		}
+		Main.friendList.add(newFriends);
+		XmlTreatment.addFriendXML(newFriends);
 	}
 }

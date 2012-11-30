@@ -19,6 +19,7 @@ import java.io.*;
 import socialNetwork.Main;
 import socialNetwork.ui.Interface;
 import socialNetwork.src.Message;
+import socialNetwork.src.Friends;
 
 public class Serveur {
 
@@ -86,7 +87,7 @@ public class Serveur {
 		byte[] buff = new byte[bb.remaining()];
 		bb.get(buff);
 		String receiveData = new String(buff);
-
+		
 		String so1 = receiveData.substring(0, 1);
 		int o1 = Integer.parseInt(so1);
 		switch(o1){
@@ -128,15 +129,12 @@ public class Serveur {
 			case 0 :
 				//Demande status
 				break;
-			case 2 :
+			case 1 :
 				//Envoi status
 				break;
 			}
 			break;
 		case 4 :
-			//commentaire
-			break;
-		case 5 :
 			//Image
 			break;	
 		}
