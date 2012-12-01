@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import socialNetwork.src.Serveur;
 import socialNetwork.src.Friends;
+import socialNetwork.src.XmlTreatment;
 
 public class Main {
 	
@@ -13,7 +14,7 @@ public class Main {
 	public static int nb;
 		
 	public static void main(String[] args) throws Exception{
-		friendList = new ArrayList<Friends>(Friends.getFriends());
+		friendList = new ArrayList<Friends>(XmlTreatment.getFriendsXML());
 		Serveur serv = new Serveur();
 		serv.run();
 	}
