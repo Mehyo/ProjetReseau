@@ -24,7 +24,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
+import socialNetwork.src.Friends;
 import socialNetwork.src.Message;
+import socialNetwork.src.Status;
 
 public class Interface extends JFrame {
 
@@ -64,7 +66,7 @@ public class Interface extends JFrame {
 				Date date = new Date();
 				String status = "[" + dateFormat.format(date) +"]"+ System.getProperty("user.name")+"> " + postText.getText();
 				JLabel label = new JLabel(status);
-				Message.sendStatus(status);
+				Status.createNewStatus(status);
 				postText.setText("");
 				me.add(label);
 				/* Et redessine */

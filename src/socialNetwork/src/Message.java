@@ -2,22 +2,7 @@ package socialNetwork.src;
 
 import java.net.InetAddress;
 
-import socialNetwork.Main;
-
 public class Message {
-	
-	public static void sendStatus (String status){
-		try{
-			for (int i = 0; i < Main.friendList.size(); i++){
-				Friends friend = (Friends) Main.friendList.get(i);
-				if (friend.isMyFriend()==true){
-					String friendAddress = friend.hostFriend();
-					InetAddress address = InetAddress.getByName(friendAddress);
-					postStatus(status, address);
-				}
-			}
-		}catch (Exception e){}
-	}
 	
 	public static void postStatus(String status, InetAddress address){
 		String data = "10" + status;
@@ -69,7 +54,6 @@ public class Message {
 	public static void friendsImage(InetAddress address){
 		Serveur.createSocket(address, "40");
 	}
-
 
 	public static void printStatus(String newStatus){
 		Serveur.ex.himStatus(newStatus);

@@ -48,12 +48,12 @@ public class XmlTreatment {
 		racine.addContent(friend);
 		Attribute name = new Attribute("name", newFriends.nameFriend());
 		friend.setAttribute(name);
-		Attribute host = new Attribute("host", newFriends.hostName());
+		Attribute host = new Attribute("host", newFriends.hostFriend());
 		friend.setAttribute(host);
 		Attribute friendStatus = new Attribute("friendStatus", "false");
 		friend.setAttribute(friendStatus);
 		Attribute friendPicture = new Attribute("Picture", "none");
-		friend.setAttribute(friendStatus);
+		friend.setAttribute(friendPicture);
 	}
 
 	/*Récupération liste d'amis*/

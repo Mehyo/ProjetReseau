@@ -1,7 +1,5 @@
 package socialNetwork.src;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -11,20 +9,18 @@ import java.nio.channels.Selector;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.*;
 import java.util.Iterator;
 import java.util.Set;
 import java.io.*;
 
-import socialNetwork.Main;
 import socialNetwork.ui.Interface;
 import socialNetwork.src.Message;
 import socialNetwork.src.Friends;
+import socialNetwork.src.Commentary;
 
 public class Serveur {
 
 	public static final int port = 5234;
-	private String newStatus;
 	public static Interface ex;
 
 	public Serveur(){}
@@ -96,11 +92,10 @@ public class Serveur {
 			int o11 = Integer.parseInt(so11);
 			switch(o11){
 			case 0 :
-				newStatus = receiveData.substring(2);
-				Message.printStatus(newStatus);
+				Message.printStatus(receiveData.substring(2));
 				break;
 			case 1 :
-				//envoi commentaire
+				Commentary.analyseCommentary(receiveData.substring(2));
 			}
 		case 2 :
 			String so2 = receiveData.substring(1, 2);
