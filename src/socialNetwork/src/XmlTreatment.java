@@ -74,3 +74,4 @@ public class XmlTreatment {
 		}
 		return listFriends;
 	}
+}
