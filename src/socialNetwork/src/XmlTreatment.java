@@ -42,15 +42,15 @@ public class XmlTreatment {
 		}
 	}
 
-	public static void addFriendXML(String friendName, String friendHost, String status) throws Exception{
+	public static void addFriendXML(Friends newFriends) throws Exception{
 		readFileXML("friendList");
 		Element friend = new Element("friend");
 		racine.addContent(friend);
-		Attribute name = new Attribute("name", friendName);
+		Attribute name = new Attribute("name", newFriends.nameFriend());
 		friend.setAttribute(name);
-		Attribute host = new Attribute("host", friendHost);
+		Attribute host = new Attribute("host", newFriends.hostName());
 		friend.setAttribute(host);
-		Attribute friendStatus = new Attribute("friendStatus", status);
+		Attribute friendStatus = new Attribute("friendStatus", "false");
 		friend.setAttribute(friendStatus);
 		Attribute friendPicture = new Attribute("Picture", "none");
 		friend.setAttribute(friendStatus);
