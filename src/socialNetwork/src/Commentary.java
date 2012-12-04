@@ -1,6 +1,7 @@
 package socialNetwork.src;
 
-import socialNetwork.Main;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class Commentary {
 
@@ -9,25 +10,20 @@ public class Commentary {
 	private String sOwner;
 	private String sDate;
 
-	public Commentary(){
-		this.cContent = "";
-		this.cOwner = "";
-		this.sOwner = "";
-		this.sDate = "";
-	}
-
-	public Commentary(String owner, String content){
-		this.cContent = content;
-		this.cOwner = owner;
-		this.sOwner = "";
-		this.sDate = "";
-	}
-
+	
 	public Commentary(String c_Owner, String c_Content, String s_Owner, String s_Date){
 		this.cContent = c_Content;
 		this.cOwner = c_Owner;
 		this.sOwner = s_Owner;
 		this.sDate = s_Date;
+	}
+
+	public Commentary(String owner, String content){
+		this(content, owner, "", "");
+	}
+	
+	public Commentary(){
+		this("", "", "", "");
 	}
 
 	public void setcOwner(String cOwner) {
@@ -103,12 +99,15 @@ public class Commentary {
 	}
 
 
-	public static void sendComment(Status status){
-		/* */
+	public static void sendComment(Status status, String comment){
+		String dataSend = status.getOwner() + ":" + status.getDate() + ":" + System.getProperty("user.name") + ":" + comment;
+		try {
+			Message.postComment(dataSend, InetAddress.getByName(status.getOwner()));
+		} catch (Exception e) {}
 	}
 
 	public static void postComment(){
-		
+		/**/
 	}
 
 }

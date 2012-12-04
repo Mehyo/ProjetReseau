@@ -8,27 +8,26 @@ public class Status {
 
 	private String sContent;
 	private String sOwner;
+	private String sDate;
 	private Commentary sComment;
 	public static ArrayList<Status> listStatus;
 	
-	public Status(){
-		this.sContent = "";
-		this.sOwner = "";
-		this.sComment = new Commentary();
-	}
-	
-	public Status(String owner, String content){
+	public Status(String owner, String content, String date ,Commentary comment){
 		this.sContent = content;
 		this.sOwner = owner;
-		this.sComment = new Commentary();
-	}
-	
-	public Status(String owner, String content, Commentary comment){
-		this.sContent = content;
-		this.sOwner = owner;
+		this.sDate = date;
 		this.sComment = comment;
 	}
 	
+	public Status(){
+		this("", "", "", new Commentary());
+	}
+	
+	public Status(String owner, String content, String date){
+		this(owner, content, date, new Commentary());
+	}
+	
+		
 	public void setOwner(String owner){
 		this.sOwner = owner;
 	}
@@ -45,10 +44,14 @@ public class Status {
 		return this.sContent;
 	}
 	
-	public void setCommentary(Commentary comment){
-		this.sComment = comment;
+	public String getDate(){
+		return this.sDate;
 	}
 	
+	public void setDate(String date){
+		this.sDate = date;
+	}
+		
 	public void setCommentary(String owner, String content){
 		this.sComment = new Commentary(owner, content);
 	}
@@ -61,8 +64,10 @@ public class Status {
 		/*Xml import */
 	}
 	
+	
 	public static void createNewStatus(String content){
-		Status status = new Status("me", content);
+		String date = ""; //chope la date systeme
+		Status status = new Status("me", content, date);
 		/*
 		 * addStatus(status) <- Ajoute le status à la liste des status.
 		 */

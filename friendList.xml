@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <list>
+	<friend>
+		<name>amiviell</name>
+		<host>bowmore</host>
+		<friendStatus>false</friendStatus>
+		<picture>none</picture>
+	</friend>
 
-  <friend>
-    <name>amiviell</name>
-    <host>localhost</host>
-    <friendStatus>false</friendStatus>
-    <picture>none</picture>
-  </friend>
+	<friend>
+		<name>scoavoux</name>
+		<host>chani</host>
+		<friendStatus>false</friendStatus>
+		<picture> none </picture>
+	</friend>
 
-  <friend>
-    <name>scoavoux</name>
-    <host>chani</host>
-    <friendStatus>false</friendStatus>
-    <picture> none </picture>
-  </friend>
-
-  <friend>
-    <name>ysenel</name>
-    <host>cezanne</host>
-    <friendStatus>true</friendStatus>
-    <picture> none </picture>
-  </friend>
-
+	<friend>
+		<name>ysenel</name>
+		<host>cezanne</host>
+		<friendStatus>true</friendStatus>
+		<picture> none </picture>
+	</friend>
 </list>
