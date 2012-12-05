@@ -8,8 +8,7 @@ import socialNetwork.src.Status;
 
 public class Main {
 
-	public static InetAddress[] address;
-	public static int nb;
+	public static String userName;
 		
 	public static void main(String[] args) throws Exception{
 		Friends.createFriendsList();

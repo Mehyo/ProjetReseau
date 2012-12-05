@@ -1,7 +1,9 @@
 package socialNetwork.src;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
+
+import socialNetwork.Main;
+import socialNetwork.ui.Interface;
 
 public class Commentary {
 
@@ -9,7 +11,6 @@ public class Commentary {
 	private String cContent;
 	private String sOwner;
 	private String sDate;
-
 	
 	public Commentary(String c_Owner, String c_Content, String s_Owner, String s_Date){
 		this.cContent = c_Content;
@@ -18,10 +19,10 @@ public class Commentary {
 		this.sDate = s_Date;
 	}
 
-	public Commentary(String owner, String content){
-		this(content, owner, "", "");
+	public Commentary(String c_Owner, String c_Content){
+		this(c_Owner, c_Content, "", "");
 	}
-	
+		
 	public Commentary(){
 		this("", "", "", "");
 	}
@@ -57,6 +58,14 @@ public class Commentary {
 	public String getsDate(){
 		return this.sDate;
 	}
+	
+	public String toString(){
+		return this.getsOwner()+":"+this.getsDate()+":"+this.getcOwner()+":"+this.getcContent(); 
+	}
+	
+	public String commentToString(){
+		return this.getcOwner()+":"+this.getcContent();
+	}
 
 	private static Commentary analyseString(Commentary comment, String dataSend){
 		for(int i=0; i < dataSend.length(); i++){
@@ -88,26 +97,25 @@ public class Commentary {
 	}
 
 
-	public static Commentary analyseCommentary(String dataSend){
+	public static void analyseCommentary(String dataSend){
 		Commentary comment = new Commentary();
 		comment = analyseString(comment, dataSend);
-		return comment;
+		comment.addToStatus();
 	}
 
-	public static void receiveComment(String comment){
-		/**/
+	private void addToStatus(){
+		if(this.getsOwner() == Main.userName)
+			XmlTreatment.addCommentary(this.getsDate(), this.getcOwner(), this.getcContent());
+		Interface.printCommentary(this);	
 	}
 
 
 	public static void sendComment(Status status, String comment){
-		String dataSend = status.getOwner() + ":" + status.getDate() + ":" + System.getProperty("user.name") + ":" + comment;
+		Commentary commentary = new Commentary(Main.userName, comment, status.getOwner(), status.getDate());
+		String dataSend = commentary.toString();
 		try {
 			Message.postComment(dataSend, InetAddress.getByName(status.getOwner()));
 		} catch (Exception e) {}
+		
 	}
-
-	public static void postComment(){
-		/**/
-	}
-
 }

@@ -14,7 +14,6 @@ import java.util.Set;
 import java.io.*;
 
 import socialNetwork.ui.Interface;
-import socialNetwork.src.Message;
 import socialNetwork.src.Friends;
 import socialNetwork.src.Commentary;
 
@@ -83,25 +82,25 @@ public class Serveur {
 		byte[] buff = new byte[bb.remaining()];
 		bb.get(buff);
 		String receiveData = new String(buff);
-		
+
 		String so1 = receiveData.substring(0, 1);
+		String so2 = receiveData.substring(1, 2);
 		int o1 = Integer.parseInt(so1);
+		int o2 = Integer.parseInt(so2);
+
 		switch(o1){
 		case 1 :
-			String so11 = receiveData.substring(1, 2);
-			int o11 = Integer.parseInt(so11);
-			switch(o11){
+			switch(o2){
 			case 0 :
-				Message.printStatus(receiveData.substring(2));
+				Status.printStatus(receiveData.substring(2));
 				break;
 			case 1 :
 				Commentary.analyseCommentary(receiveData.substring(2));
 			}
 		case 2 :
-			String so2 = receiveData.substring(1, 2);
-			int o2 = Integer.parseInt(so2);
 			switch(o2){
 			case 0 :
+				System.out.println("Switch: "+ receiveData.substring(2));
 				Friends.analyseFriendsRequest(receiveData.substring(2));
 				break;
 			case 1 :
@@ -119,8 +118,7 @@ public class Serveur {
 			}
 			break;
 		case 3 :
-			char o3 = receiveData.charAt(1);
-			switch(o3){
+			switch(o2){
 			case 0 :
 				//Demande status
 				break;

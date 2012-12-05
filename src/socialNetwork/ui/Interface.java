@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
+import socialNetwork.src.Commentary;
 import socialNetwork.src.Friends;
 import socialNetwork.src.Message;
 import socialNetwork.src.Status;
@@ -41,6 +42,10 @@ public class Interface extends JFrame {
 		JLabel label = new JLabel(status);
 		him.add(label);
 		panel.revalidate();
+	}
+	
+	public static void printCommentary(Commentary comment){
+		/**/
 	}
 
 	public final void initInterface() {
@@ -64,9 +69,9 @@ public class Interface extends JFrame {
 				/* Ajoute le statut */
 				DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 				Date date = new Date();
+				Status.createNewStatus(postText.getText(), true);
 				String status = "[" + dateFormat.format(date) +"]"+ System.getProperty("user.name")+"> " + postText.getText();
 				JLabel label = new JLabel(status);
-				Status.createNewStatus(status);
 				postText.setText("");
 				me.add(label);
 				/* Et redessine */
@@ -86,19 +91,37 @@ public class Interface extends JFrame {
 				fPanel.add(friendText);
 
 				JButton addButton = new JButton("Add");
+				JButton answerButton = new JButton("Ok");
 				fPanel.add(addButton);
 				fPanel.getRootPane().setDefaultButton(addButton);
+				fPanel.add(answerButton);
 				
 				addButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
-						/* Ajoute le statut */
 						String address = friendText.getText();
 						try {
-							Message.friendsRequest(InetAddress.getByName(address));
+							int truc =0;
+							if(truc == 0){
+							Message.friendsRequest(InetAddress.getByName("localhost"));
+							truc = 1;
+							}
 						} catch (Exception e) {}
 
 					}
 				});
+				answerButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent event) {
+						int truc = 0;
+						try {
+							if(truc == 0){
+							Friends.AcceptFriend("amiviell");
+							truc = 1;
+							}
+						} catch (Exception e) {}
+
+					}
+				});
+				
 				fFrame.pack();
 				fFrame.setVisible(true);
 			}

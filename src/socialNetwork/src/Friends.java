@@ -2,14 +2,14 @@ package socialNetwork.src;
 
 import java.util.ArrayList;
 
-import socialNetwork.Main;
+import socialNetwork.src.Status;
 
 public class Friends{
 
 	private String name;
 	private String host;
 	private boolean status;
-	public static ArrayList<Friends> friendList;
+	public static ArrayList<Friends> friendList = new ArrayList<Friends>();
 
 	public Friends(String name, String host, String status){
 		this.name = name;
@@ -26,10 +26,6 @@ public class Friends{
 		this.status = false;
 	}
 
-	public static void AcceptFriend(String name){	
-		/**/
-	}
-
 	public void setName(String name){
 		this.name = name;
 	}
@@ -38,19 +34,15 @@ public class Friends{
 		this.host = host;
 	}
 
-	public String nameFriend(){
+	public String getName(){
 		return this.name;
 	}
 
-	public String hostFriend(){
+	public String getHost(){
 		return this.host;
 	}
 
-	public String toString(){
-		return "(" + this.name + "," + this.host +")";
-	}
-
-	public boolean statusFriends(){	
+	public boolean getStatus(){	
 		return this.status;
 	}
 
@@ -64,23 +56,77 @@ public class Friends{
 		//change dans xml
 	}
 
+	public String toString(){
+		return "[" + this.name + "," + this.host +"]";
+	}
+
+	public static void AcceptFriend(String name){
+		for(int i=0; i < friendList.size(); i++){
+			if(friendList.get(i).getName().equals(name) && friendList.get(i).getStatus() == false){
+				friendList.get(i).answerFriendRequest();
+				break;
+			}
+		}
+	}
+
 	public static void analyseFriendsRequest(String request){
-		Friends newFriends = new Friends();
+		System.out.println("AFR");
+		Friends newFriend = new Friends();
 		for(int i=0; i < request.length(); i++){
 			char a = request.charAt(i);
 			if (a ==':'){
-				newFriends.setName(request.substring(0,i-1));
-				newFriends.setHost(request.substring(i+1));
+				newFriend.setName(request.substring(0,i));
+				newFriend.setHost(request.substring(i+1));
 				break;
 			}			
 		}
-		friendList.add(newFriends);
-		try {
-			XmlTreatment.addFriendXML(newFriends);
-		} catch (Exception e) {}
+		if(friendList.size() == 0)
+			friendList.add(newFriend);
+		else{
+			for(int i=0; i < friendList.size(); i++){
+				System.out.println("AFR else");
+				if(!friendList.get(i).getName().equals(newFriend.getName()))
+					friendList.add(newFriend);
+			}
+		}
+
+		//		try {
+		//			XmlTreatment.addFriendXML(newFriends);
+		//		} catch (Exception e) {}
 	}
-	
+
 	public static void createFriendsList(){
-		friendList = XmlTreatment.getFriendsXML();
+		//friendList = XmlTreatment.getFriendsXML();
+	}
+
+	private static String contentFriendList(){
+		String content = "";
+		for(int i=0; i < friendList.size(); i ++)
+			content = friendList.get(i).toString();
+		return content;
+	}
+
+	private static String contentStatus(boolean type){
+		String content= "";
+		if(type)
+			for(int i=0; i < Status.listStatus.size(); i ++)
+				content = Status.listStatus.get(i).toString();
+		else
+			for(int i=0; i < Status.listStatus.size(); i ++){
+				if(Status.listStatus.get(i).getType() == "public")
+					content = Status.listStatus.get(i).toString();
+			}
+		return content;
+	}
+
+	private void answerFriendRequest(){
+		this.setToFriend();
+		//		//Change in xml
+		//		String dataToSend;
+		//		if(this.getStatus())
+		//			dataToSend = this.getName() + contentFriendList() + contentStatus(true);
+		//		else
+		//			dataToSend = this.getName() + contentFriendList() + contentStatus(false);
+		//		Message.friendsPositivAnswer(this.getHost(), dataToSend);
 	}
 }
