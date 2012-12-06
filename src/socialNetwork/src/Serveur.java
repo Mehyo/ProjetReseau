@@ -97,10 +97,10 @@ public class Serveur {
 			case 1 :
 				Commentary.analyseCommentary(receiveData.substring(2));
 			}
+			break;
 		case 2 :
 			switch(o2){
 			case 0 :
-				System.out.println("Switch: "+ receiveData.substring(2));
 				Friends.analyseFriendsRequest(receiveData.substring(2));
 				break;
 			case 1 :

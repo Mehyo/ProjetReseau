@@ -37,13 +37,13 @@ public class Interface extends JFrame {
 	public Interface() {
 		initInterface();
 	}
-	
+
 	public void himStatus(String status){
 		JLabel label = new JLabel(status);
 		him.add(label);
 		panel.revalidate();
 	}
-	
+
 	public static void printCommentary(Commentary comment){
 		/**/
 	}
@@ -85,7 +85,7 @@ public class Interface extends JFrame {
 				fPanel.setLayout(new BoxLayout(fPanel, BoxLayout.Y_AXIS));
 				JFrame fFrame = new JFrame("Add Friend");
 				fFrame.getContentPane().add(fPanel);
-				
+
 				friendText = new JTextField(10);
 				friendText.setMaximumSize(new Dimension(Integer.MAX_VALUE, postText.getMinimumSize().height));
 				fPanel.add(friendText);
@@ -95,33 +95,25 @@ public class Interface extends JFrame {
 				fPanel.add(addButton);
 				fPanel.getRootPane().setDefaultButton(addButton);
 				fPanel.add(answerButton);
-				
+
 				addButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
 						String address = friendText.getText();
 						try {
-							int truc =0;
-							if(truc == 0){
 							Message.friendsRequest(InetAddress.getByName("localhost"));
-							truc = 1;
-							}
 						} catch (Exception e) {}
 
 					}
 				});
 				answerButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
-						int truc = 0;
 						try {
-							if(truc == 0){
 							Friends.AcceptFriend("amiviell");
-							truc = 1;
-							}
 						} catch (Exception e) {}
 
 					}
 				});
-				
+
 				fFrame.pack();
 				fFrame.setVisible(true);
 			}

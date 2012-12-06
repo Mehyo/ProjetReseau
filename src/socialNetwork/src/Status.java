@@ -92,8 +92,7 @@ public class Status {
 		
 		String sDate = date.toString();
 		Status status = new Status("me", content, sDate);
-		System.out.println("Friendlist size :"+Friends.friendList.size());
-		
+				
 		addStatus(status);
 		if(publicStatus)
 			sendStatus(status, true);

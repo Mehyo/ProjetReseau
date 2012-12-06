@@ -70,7 +70,6 @@ public class Friends{
 	}
 
 	public static void analyseFriendsRequest(String request){
-		System.out.println("AFR");
 		Friends newFriend = new Friends();
 		for(int i=0; i < request.length(); i++){
 			char a = request.charAt(i);
@@ -84,7 +83,6 @@ public class Friends{
 			friendList.add(newFriend);
 		else{
 			for(int i=0; i < friendList.size(); i++){
-				System.out.println("AFR else");
 				if(!friendList.get(i).getName().equals(newFriend.getName()))
 					friendList.add(newFriend);
 			}
@@ -121,12 +119,12 @@ public class Friends{
 
 	private void answerFriendRequest(){
 		this.setToFriend();
-		//		//Change in xml
-		//		String dataToSend;
-		//		if(this.getStatus())
-		//			dataToSend = this.getName() + contentFriendList() + contentStatus(true);
-		//		else
-		//			dataToSend = this.getName() + contentFriendList() + contentStatus(false);
-		//		Message.friendsPositivAnswer(this.getHost(), dataToSend);
+		//Change in xml
+		String dataToSend;
+		if(this.getStatus())
+			dataToSend = this.getName() + contentFriendList() + contentStatus(true);
+		else
+			dataToSend = this.getName() + contentFriendList() + contentStatus(false);
+		Message.friendsAnswer(this.getHost(), dataToSend, this.getStatus());
 	}
 }

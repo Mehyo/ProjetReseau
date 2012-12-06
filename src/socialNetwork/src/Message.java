@@ -21,16 +21,15 @@ public class Message {
 		}catch(Exception e){}
 	}
 
-	public static void friendsPositivAnswer(String host, String dataToSend){
-		String data = "21" + dataToSend;
+	public static void friendsAnswer(String host, String dataToSend, boolean friends){
+		String data;
+		if(friends)
+			data = "21" + dataToSend;
+		else
+			data = "22" + dataToSend;
 		try {
 			Serveur.createSocket(InetAddress.getByName(host), data);
 		} catch (Exception e) {}
-	}
-	
-	public static void friendsNegativAnswer(InetAddress address){
-		String data = "22" + System.getProperty("user.name") /* + donnée */;
-		Serveur.createSocket(address, data);
 	}
 
 	public static void friendsListRequest(InetAddress address){
