@@ -87,11 +87,12 @@ public class Serveur {
 		String so2 = receiveData.substring(1, 2);
 		int o1 = Integer.parseInt(so1);
 		int o2 = Integer.parseInt(so2);
-
+		System.out.println("test :"+receiveData);
 		switch(o1){
 		case 1 :
 			switch(o2){
 			case 0 :
+				System.out.println("ici");
 				Status.printStatus(receiveData.substring(2));
 				break;
 			case 1 :
@@ -101,6 +102,7 @@ public class Serveur {
 		case 2 :
 			switch(o2){
 			case 0 :
+				System.out.println(receiveData.substring(2));
 				Friends.analyseFriendsRequest(receiveData.substring(2));
 				break;
 			case 1 :
@@ -128,6 +130,14 @@ public class Serveur {
 			}
 			break;
 		case 4 :
+			switch(o2){
+			case 0 :
+				//image status
+				break;
+			case 1:
+				//image profile
+				break;
+			}
 			//Image
 			break;	
 		}

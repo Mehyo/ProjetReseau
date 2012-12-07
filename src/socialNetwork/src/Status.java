@@ -5,7 +5,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
 
+import socialNetwork.Main;
 import socialNetwork.src.Message;
 
 public class Status {
@@ -80,10 +82,10 @@ public class Status {
 	}
 	
 	public String toString(){
-		String status = "["+ this.getContent();
+		String status = "{"+ this.getDate()+ "_§§_" + this.getContent() + "_&&_";
 		for(int i=0; i < listComment.size(); i ++)
-			status +="&§" + listComment.get(i).commentToString();
-		return status + "]";
+			status +=listComment.get(i).commentToString() + "_&&_";
+		return status + "}" ;
 	}
 
 	public static void createNewStatus(String content, boolean publicStatus){
@@ -95,9 +97,9 @@ public class Status {
 				
 		addStatus(status);
 		if(publicStatus)
-			sendStatus(status, true);
+			sendStatus(status, sDate, true);
 		else
-			sendStatus(status, false);
+			sendStatus(status, sDate, false);
 	}
 	
 	private static void addStatus(Status status){
@@ -105,13 +107,14 @@ public class Status {
 		/*add to xml*/
 	}
 	
-	private static void sendStatus(Status status, boolean publicStatus){
+	private static void sendStatus(Status status, String date, boolean publicStatus){
 		try{
 			for (int i = 0; i < Friends.friendList.size(); i++){
 				Friends friend = Friends.friendList.get(i);
+				StringTokenizer st = new StringTokenizer( friend.getHost(), "/");
 				if(publicStatus){
-					String friendAddress = friend.getHost();
-					Message.postStatus(status.getContent(), InetAddress.getByName("localhost"));
+					System.out.println("ici");
+					Message.postStatus(Main.userName + "_&§&_"+ date + "_&§&_" + status.getContent(), InetAddress.getByName(st.nextToken()));
 				}
 				else{
 					if (friend.getStatus()==true){
@@ -128,6 +131,8 @@ public class Status {
 	}
 	
 	public static void printStatus(String newStatus){
-		Serveur.ex.himStatus(newStatus);
+		StringTokenizer st = new StringTokenizer(newStatus, "_&§&_");
+		String tmp = st.nextToken();
+		Serveur.ex.himStatus("[" + st.nextToken()+"]"+ tmp + ">" +st.nextToken());
 	}
 }

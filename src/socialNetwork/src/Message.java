@@ -5,6 +5,7 @@ import java.net.InetAddress;
 public class Message {
 	
 	public static void postStatus(String status, InetAddress address){
+		System.out.println(status+address.toString());
 		String data = "10" + status;
 		Serveur.createSocket(address,data);
 	}

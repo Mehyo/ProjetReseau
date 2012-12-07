@@ -100,7 +100,7 @@ public class Interface extends JFrame {
 					public void actionPerformed(ActionEvent event) {
 						String address = friendText.getText();
 						try {
-							Message.friendsRequest(InetAddress.getByName("localhost"));
+							Message.friendsRequest(InetAddress.getByName("glenmorangie"));
 						} catch (Exception e) {}
 
 					}
@@ -108,7 +108,7 @@ public class Interface extends JFrame {
 				answerButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
 						try {
-							Friends.AcceptFriend("amiviell");
+							Friends.AcceptFriend("ysenel");
 						} catch (Exception e) {}
 
 					}

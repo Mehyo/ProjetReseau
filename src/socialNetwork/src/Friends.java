@@ -1,6 +1,7 @@
 package socialNetwork.src;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import socialNetwork.src.Status;
 
@@ -71,14 +72,11 @@ public class Friends{
 
 	public static void analyseFriendsRequest(String request){
 		Friends newFriend = new Friends();
-		for(int i=0; i < request.length(); i++){
-			char a = request.charAt(i);
-			if (a ==':'){
-				newFriend.setName(request.substring(0,i));
-				newFriend.setHost(request.substring(i+1));
-				break;
-			}			
-		}
+		StringTokenizer stringT = new StringTokenizer(request, "_&§&_");		
+		newFriend.setName(stringT.nextToken());
+		newFriend.setHost(stringT.nextToken());
+		newFriend.setToFriend();
+		System.out.println(newFriend.toString());
 		if(friendList.size() == 0)
 			friendList.add(newFriend);
 		else{
@@ -105,7 +103,7 @@ public class Friends{
 	}
 
 	private static String contentStatus(boolean type){
-		String content= "";
+		String content = null;
 		if(type)
 			for(int i=0; i < Status.listStatus.size(); i ++)
 				content = Status.listStatus.get(i).toString();
@@ -122,9 +120,9 @@ public class Friends{
 		//Change in xml
 		String dataToSend;
 		if(this.getStatus())
-			dataToSend = this.getName() + contentFriendList() + contentStatus(true);
+			dataToSend = System.getProperty("user.name") + contentFriendList() + contentStatus(true);
 		else
-			dataToSend = this.getName() + contentFriendList() + contentStatus(false);
+			dataToSend = System.getProperty("user.name") + contentFriendList() + contentStatus(false);
 		Message.friendsAnswer(this.getHost(), dataToSend, this.getStatus());
 	}
 }

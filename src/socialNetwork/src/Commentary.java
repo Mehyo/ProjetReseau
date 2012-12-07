@@ -1,6 +1,7 @@
 package socialNetwork.src;
 
 import java.net.InetAddress;
+import java.util.StringTokenizer;
 
 import socialNetwork.Main;
 import socialNetwork.ui.Interface;
@@ -67,39 +68,47 @@ public class Commentary {
 		return this.getcOwner()+":"+this.getcContent();
 	}
 
-	private static Commentary analyseString(Commentary comment, String dataSend){
-		for(int i=0; i < dataSend.length(); i++){
-			char c = dataSend.charAt(i);
-			if (c ==':'){
-				if(comment.getsOwner() != ""){
-					if(comment.getsDate() != ""){
-						if(comment.getcOwner() != ""){
-							comment.setcContent(dataSend.substring(0,i-1));
-							break;
-						}
-						else{
-							comment.setcOwner(dataSend.substring(0,i-1));
-							analyseString(comment, dataSend.substring(i+1));
-						}
-					}
-					else{
-						comment.setsDate(dataSend.substring(0,i-1));
-						analyseString(comment, dataSend.substring(i+1));
-					}
-				}
-				else{
-					comment.setsOwner(dataSend.substring(0,i-1));
-					analyseString(comment, dataSend.substring(i+1));
-				}
-			}
-		}
-		return comment;
+//	private static Commentary analyseString(Commentary comment, String dataSend){
+//		for(int i=0; i < dataSend.length(); i++){
+//			char c = dataSend.charAt(i);
+//			if (c ==':'){
+//				if(comment.getsOwner() != ""){
+//					if(comment.getsDate() != ""){
+//						if(comment.getcOwner() != ""){
+//							comment.setcContent(dataSend.substring(0,i-1));
+//							break;
+//						}
+//						else{
+//							comment.setcOwner(dataSend.substring(0,i-1));
+//							analyseString(comment, dataSend.substring(i+1));
+//						}
+//					}
+//					else{
+//						comment.setsDate(dataSend.substring(0,i-1));
+//						analyseString(comment, dataSend.substring(i+1));
+//					}
+//				}
+//				else{
+//					comment.setsOwner(dataSend.substring(0,i-1));
+//					analyseString(comment, dataSend.substring(i+1));
+//				}
+//			}
+//		}
+//		return comment;
+//	}
+	
+	private void analyseString(String dataSend){
+		StringTokenizer stringT = new StringTokenizer(dataSend, "_&§&_");
+		this.setsOwner(stringT.nextToken());
+		this.setsDate(stringT.nextToken());
+		this.setcOwner(stringT.nextToken());
+		this.setcContent(stringT.nextToken());
 	}
 
 
 	public static void analyseCommentary(String dataSend){
 		Commentary comment = new Commentary();
-		comment = analyseString(comment, dataSend);
+		comment.analyseString(dataSend);
 		comment.addToStatus();
 	}
 
