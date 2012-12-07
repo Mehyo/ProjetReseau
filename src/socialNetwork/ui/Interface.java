@@ -100,7 +100,7 @@ public class Interface extends JFrame {
 					public void actionPerformed(ActionEvent event) {
 						String address = friendText.getText();
 						try {
-							Message.friendsRequest(InetAddress.getByName("glenmorangie"));
+							Message.friendsRequest(InetAddress.getByName("ernst"));
 						} catch (Exception e) {}
 
 					}

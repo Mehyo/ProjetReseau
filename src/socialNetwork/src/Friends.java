@@ -10,6 +10,8 @@ public class Friends{
 	private String name;
 	private String host;
 	private boolean status;
+	private ArrayList<Friends> ListOfFriend;
+	
 	public static ArrayList<Friends> friendList = new ArrayList<Friends>();
 
 	public Friends(String name, String host, String status){
@@ -19,12 +21,14 @@ public class Friends{
 			this.status = false;
 		else
 			this.status = true;
+		this.ListOfFriend = new ArrayList<Friends>();
 	}
 
 	public Friends(){
 		this.name = "";
 		this.host = "";
 		this.status = false;
+		this.ListOfFriend = new ArrayList<Friends>();
 	}
 
 	public void setName(String name){
@@ -73,10 +77,11 @@ public class Friends{
 	public static void analyseFriendsRequest(String request){
 		Friends newFriend = new Friends();
 		StringTokenizer stringT = new StringTokenizer(request, "_&§&_");		
+
 		newFriend.setName(stringT.nextToken());
 		newFriend.setHost(stringT.nextToken());
 		newFriend.setToFriend();
-		System.out.println(newFriend.toString());
+
 		if(friendList.size() == 0)
 			friendList.add(newFriend);
 		else{
@@ -124,5 +129,29 @@ public class Friends{
 		else
 			dataToSend = System.getProperty("user.name") + contentFriendList() + contentStatus(false);
 		Message.friendsAnswer(this.getHost(), dataToSend, this.getStatus());
+	}
+
+	private static Friends findFriend(String name){
+		for(int i =0; i < friendList.size();i++){
+			if(friendList.get(i).getName().equals((String) name))
+				return friendList.get(i);
+		}
+		return null;
+	}
+
+	public static void getFriendData(String dataSend){
+		StringTokenizer st1 = new StringTokenizer(dataSend, "_&§&_");
+		Friends friend = findFriend(st1.nextToken());
+		
+		StringTokenizer st2 = new StringTokenizer(st1.nextToken(), "_§§_");
+		for(int j=0; j < st2.countTokens();j++){
+			StringTokenizer st3 = new StringTokenizer(st2.nextToken(), "_o/");
+			friend.ListOfFriend.add(new Friends(st3.nextToken(), st3.nextToken(), "false"));
+		}
+		
+		StringTokenizer st3 = new StringTokenizer(st1.nextToken(),"{");
+		for(int i =0; i < st3.countTokens();i++){
+			//affiche Status friend.getName() et affiche commentaire associé.
+		}
 	}
 }

@@ -5,7 +5,6 @@ import java.net.InetAddress;
 public class Message {
 	
 	public static void postStatus(String status, InetAddress address){
-		System.out.println(status+address.toString());
 		String data = "10" + status;
 		Serveur.createSocket(address,data);
 	}
@@ -17,7 +16,7 @@ public class Message {
 	
 	public static void friendsRequest(InetAddress address){
 		try{
-		String data = "20" + System.getProperty("user.name") + ':' + InetAddress.getLocalHost().getHostName();
+		String data = "20" + System.getProperty("user.name") + "_&§&_" + InetAddress.getLocalHost().getHostName();
 		Serveur.createSocket(address, data);
 		}catch(Exception e){}
 	}

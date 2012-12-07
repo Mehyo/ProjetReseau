@@ -111,10 +111,10 @@ public class Status {
 		try{
 			for (int i = 0; i < Friends.friendList.size(); i++){
 				Friends friend = Friends.friendList.get(i);
-				StringTokenizer st = new StringTokenizer( friend.getHost(), "/");
 				if(publicStatus){
-					System.out.println("ici");
-					Message.postStatus(Main.userName + "_&§&_"+ date + "_&§&_" + status.getContent(), InetAddress.getByName(st.nextToken()));
+					System.out.println("ici SS");
+					System.out.println(friend.getHost());
+					Message.postStatus(Main.userName + "_&§&_"+ date + "_&§&_" + status.getContent(), InetAddress.getByName(friend.getHost()));
 				}
 				else{
 					if (friend.getStatus()==true){

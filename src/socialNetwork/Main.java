@@ -14,6 +14,7 @@ public class Main {
 	public static void main(String[] args) throws Exception{
 		Friends.createFriendsList();
 		Status.createListeStatus();
+		Friends.friendList.add(new Friends("ysenel", "ernst", "true"));
 		Serveur serv = new Serveur();
 		serv.run();
 	}
