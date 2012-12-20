@@ -28,7 +28,7 @@ public abstract class Protocole {
 	}
 	
 	private boolean connect(int i, String dataSend){
-		if( i == 42){
+		if( i == 00){
 			//function
 			return true;
 		}

@@ -14,6 +14,12 @@ public class Friends{
 	
 	public static ArrayList<Friends> friendList = new ArrayList<Friends>();
 
+	/**
+	 * Génère un nouvel ami défini par son nom, son addresse et son statut (Accepté ou non)
+	 * @param name Le nom de l'ami.
+	 * @param host Son addresse.
+	 * @param status Son état (Accepté ou non)
+	 */
 	public Friends(String name, String host, String status){
 		this.name = name;
 		this.host = host;
@@ -24,6 +30,9 @@ public class Friends{
 		this.ListOfFriend = new ArrayList<Friends>();
 	}
 
+	/**
+	 * Génère un nouvel ami vide.
+	 */
 	public Friends(){
 		this.name = "";
 		this.host = "";
@@ -31,40 +40,70 @@ public class Friends{
 		this.ListOfFriend = new ArrayList<Friends>();
 	}
 
+	/**
+	 * Défini le nom d'un ami.
+	 * @param name Le nom de l'ami.
+	 */
 	public void setName(String name){
 		this.name = name;
 	}
 
+	/**
+	 * Défini l'addressed d'un ami.
+	 * @param host L'addresse de l'ami.
+	 */
 	public void setHost(String host){
 		this.host = host;
 	}
 
+	/**
+	 * @return Le nom d'un ami.
+	 */
 	public String getName(){
 		return this.name;
 	}
 
+	/**
+	 * @return L'addresse d'un ami.
+	 */
 	public String getHost(){
 		return this.host;
 	}
 
+	/**
+	 * @return Le status de l'ami.
+	 */
 	public boolean getStatus(){	
 		return this.status;
 	}
 
+	/**
+	 * Défini l'ami commme accepté.
+	 */
 	public void setToFriend(){
 		this.status = true;
 		//change dans xml
 	}
 
+	/**
+	 * Défini l'ami comme non accepté.
+	 */
 	public void setToStranger(){
 		this.status = false;
 		//change dans xml
 	}
 
+	/**
+	 * @retrun Une chaine de caractère contenant le nom et l'addresse d'un ami.
+	 */
 	public String toString(){
 		return "[" + this.name + "," + this.host +"]";
 	}
 
+	/**
+	 * Rajoute l'ami à la liste des amis.
+	 * @param name Le nom de l'ami.
+	 */
 	public static void AcceptFriend(String name){
 		for(int i=0; i < friendList.size(); i++){
 			if(friendList.get(i).getName().equals(name) && friendList.get(i).getStatus() == false){
@@ -74,6 +113,10 @@ public class Friends{
 		}
 	}
 
+	/**
+	 * Analyse une demande d'ami reçu.
+	 * @param request La requête.
+	 */
 	public static void analyseFriendsRequest(String request){
 		Friends newFriend = new Friends();
 		StringTokenizer stringT = new StringTokenizer(request, "_&§&_");		
@@ -96,8 +139,11 @@ public class Friends{
 		//		} catch (Exception e) {}
 	}
 
+	/**
+	 * Génére la liste d'ami à partir d'un fichier de configuration.
+	 */
 	public static void createFriendsList(){
-		//friendList = XmlTreatment.getFriendsXML();
+		XmlTreatment.getFriendsXML();
 	}
 
 	private static String contentFriendList(){
@@ -120,6 +166,7 @@ public class Friends{
 		return content;
 	}
 
+
 	private void answerFriendRequest(){
 		this.setToFriend();
 		//Change in xml
@@ -139,7 +186,7 @@ public class Friends{
 		return null;
 	}
 
-	public static void getFriendData(String dataSend){
+	private static void getFriendData(String dataSend){
 		StringTokenizer st1 = new StringTokenizer(dataSend, "_&§&_");
 		Friends friend = findFriend(st1.nextToken());
 		
