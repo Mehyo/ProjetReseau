@@ -14,19 +14,10 @@ public class Main {
 	public static String userName;
 		
 	public static void main(String[] args) throws Exception{
-		
 		XmlTreatment.setUserName();
-	
-		
-		Status test = new Status("owner", "content", "date");
-		Status.add(test);
-		
-		Commentary test2 = new Commentary("owner2","Je suis une carotte corompue");		
-		Commentary.add(test2);
-		
 		Friends.createFriendsList();
-		
 		Status.createListeStatus();
+		Serveur.connect();
 		Serveur serv = new Serveur();
 		serv.run();
 	}

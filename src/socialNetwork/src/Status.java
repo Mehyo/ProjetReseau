@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.StringTokenizer;
 
 import socialNetwork.Main;
@@ -18,7 +19,7 @@ public class Status {
 	private String sType;
 	private ArrayList<Commentary> listComment = new ArrayList<Commentary>();
 	public static ArrayList<Status> listStatus = new ArrayList<Status>();
-	
+
 	/**
 	 * Crée un nouveau status à partir des champs spécifié.
 	 * @param owner Propriétaire.
@@ -34,7 +35,7 @@ public class Status {
 		this.sType = type;
 		this.listComment.add(comment);
 	}
-	
+
 	/**
 	 * Crée un nouveau status public sans commentaire.
 	 * @param owner Propriétaire.
@@ -47,7 +48,7 @@ public class Status {
 		this.sDate = date;
 		this.sType = "public";
 	}
-	
+
 	/**
 	 * Crée un nouveau status public vide.
 	 */
@@ -57,8 +58,8 @@ public class Status {
 		this.sDate = "";
 		this.sType = "public";
 	}
-	
-	
+
+
 	/**
 	 * Défini le propriétaire d'un status.
 	 * @param owner Nom du propriétaire.
@@ -66,7 +67,7 @@ public class Status {
 	public void setOwner(String owner){
 		this.sOwner = owner;
 	}
-	
+
 	/**
 	 * Défini le contenu d'un status.
 	 * @param content Contenu du status.
@@ -74,7 +75,7 @@ public class Status {
 	public void setContent(String content){
 		this.sContent = content;
 	}
-	
+
 	/**
 	 * Défini la date d'un status.
 	 * @param date Date du status.
@@ -82,7 +83,7 @@ public class Status {
 	public void setDate(String date){
 		this.sDate = date;
 	}
-	
+
 	/**
 	 * Défini le type d'un status.
 	 * @param type Type du status (Public/Privé)
@@ -90,7 +91,7 @@ public class Status {
 	public void setType(String type){
 		this.sType = type;
 	}
-		
+
 	/**
 	 * Défini un commentaire pour le status.
 	 * @param owner Nom du propriétaire du commentaire.
@@ -99,42 +100,42 @@ public class Status {
 	public void setCommentary(String owner, String content){
 		this.listComment.add(new Commentary(owner, content, this.getOwner(), this.getDate()));
 	}
-	
+
 	/**
 	 * @return Nom du propriétaire du status.
 	 */
 	public String getOwner(){
 		return this.sOwner;
 	}
-	
+
 	/**
 	 * @return Contenu du status.
 	 */
 	public String getContent(){
 		return this.sContent;
 	}
-	
+
 	/**
 	 * @return Date du status
 	 */
 	public String getDate(){
 		return this.sDate;
 	}
-	
+
 	/**
 	 * @return Type du status.
 	 */
 	public String getType(){
 		return this.sType;
 	}
-	
+
 	/**
 	 * @return Liste des commentaires.
 	 */
 	public ArrayList<Commentary> getCommentary(){
 		return this.listComment;
 	}
-	
+
 	/**
 	 * @return Chaine de caractère contenant toute les informations sur le status.
 	 */
@@ -153,17 +154,34 @@ public class Status {
 	public static void createNewStatus(String content, boolean publicStatus){
 		DateFormat dateFormat = new SimpleDateFormat("[dd/MM/yyyy][HH:mm:ss]");
 		Date date = new Date();
-		
+
 		String sDate = date.toString();
 		Status status = new Status("me", content, sDate);
-				
+
 		addStatus(status);
 		if(publicStatus)
 			sendStatus(status, sDate, true);
 		else
 			sendStatus(status, sDate, false);
 	}
-	
+
+	/**
+	 * Envoi tout les status contenu dans la liste des status.
+	 * @param address Adresse du destinataire.
+	 * @param type Etat (Amis/Etranger)
+	 */
+	public static void sendAllStatus(InetAddress address, int type){
+		Status status = new Status();
+		for(int i = 0; i < listStatus.size(); i++){
+			status = listStatus.get(i);
+			if(status.getType().equals("public"))
+				Message.postStatus(Main.userName + "##"+ status.getDate() + "##" + status.getContent(), address);
+			else
+				if (type > 0)
+					Message.postStatus(Main.userName + "##"+ status.getDate() + "##" + status.getContent(), address);
+		}
+	}
+
 	public static void add(Status status){
 		addStatus(status);
 	}
@@ -171,38 +189,35 @@ public class Status {
 		listStatus.add(status);
 		XmlTreatment.addStatusXML(status);
 	}
-	
+
 	private static void sendStatus(Status status, String date, boolean publicStatus){
 		try{
 			for (int i = 0; i < Friends.friendList.size(); i++){
 				Friends friend = Friends.friendList.get(i);
 				if(publicStatus){
-					Message.postStatus(Main.userName + "_&§&_"+ date + "_&§&_" + status.getContent(), InetAddress.getByName(friend.getHost()));
+					Message.postStatus(Main.userName + "##"+ date + "##" + status.getContent(), InetAddress.getByName(friend.getHost()));
 				}
 				else{
 					if (friend.getStatus()==true){
-						String friendAddress = friend.getHost();
-						Message.postStatus(status.getContent(), InetAddress.getByName(friendAddress));
+						Message.postStatus(Main.userName + "##"+ date + "##" + status.getContent(), InetAddress.getByName(friend.getHost()));
 					}
 				}
 			}
 		}catch (Exception e){}
 	}
-	
+
 	/**
 	 * Génére la liste des status depuis le fichier de stockage. 
 	 */
 	public static void createListeStatus(){
 		/*Xml import */
 	}
-	
+
 	/**
 	 * Affiche un nouveau status dans l'interface.
 	 * @param newStatus Le nouveau status.
 	 */
-	public static void printStatus(String newStatus){
-		StringTokenizer st = new StringTokenizer(newStatus, "_&§&_");
-		String tmp = st.nextToken();
-		Serveur.ex.himStatus("[" + st.nextToken()+"]"+ tmp + ">" +st.nextToken());
+	public static void printStatus(Hashtable<String, String> dataTable){
+		Serveur.ex.himStatus("[" + dataTable.get("Date")+"]"+ dataTable.get("Name") + ">" + dataTable.get("Status"));
 	}
 }

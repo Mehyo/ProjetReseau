@@ -4,23 +4,26 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.ServerSocket;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.Selector;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import java.io.*;
 
 import socialNetwork.ui.Interface;
 import socialNetwork.src.Friends;
-import socialNetwork.src.Commentary;
+import socialNetwork.src.Message;
 
 public class Serveur {
 
 	public static final int port = 5234;
 	public static Interface ex;
+	public static ArrayList<InetAddress> connectList = new ArrayList<InetAddress>();
 
 	public Serveur(){}
 
@@ -30,7 +33,32 @@ public class Serveur {
 		listener();
 	}
 
-	public void listener (){
+	public static void connect(){
+		initConnect();
+		for(int i = 0; i < Friends.friendList.size(); i++){
+			try{
+				Message.connect(InetAddress.getByName(Friends.friendList.get(i).getHost()));
+			}catch(Exception e){}
+		}		
+	}
+
+	public static void connect(String name, String host){
+		System.out.println(host);
+		try{
+			connectList.add(InetAddress.getByName(host));
+		}catch(Exception e){System.out.println("caca");}
+		Friends friend = Friends.findFriend(name);
+		friend.informFriend(friend.getStatus());
+	}
+
+	private static void initConnect(){
+		try{
+			for(int i = 0; i < Friends.friendList.size();i++)
+				connectList.add(InetAddress.getByName((Friends.friendList.get(i).getHost())));
+		}catch(Exception e){}
+	}
+
+	public void listener(){
 
 		try{
 			ServerSocketChannel ssc = ServerSocketChannel.open();
@@ -78,77 +106,12 @@ public class Serveur {
 	}
 
 
-	public void analyseData(ByteBuffer bb){
+	private void analyseData(ByteBuffer bb){
 		byte[] buff = new byte[bb.remaining()];
 		bb.get(buff);
 		String receiveData = new String(buff);
-
-		String so1 = receiveData.substring(0, 1);
-		String so2 = receiveData.substring(1, 2);
-		int o1 = Integer.parseInt(so1);
-		int o2 = Integer.parseInt(so2);
-		switch(o1){
-		case 1 :
-			switch(o2){
-			case 0 :
-				Status.printStatus(receiveData.substring(2));
-				break;
-			case 1 :
-				Commentary.analyseCommentary(receiveData.substring(2));
-			}
-			break;
-		case 2 :
-			switch(o2){
-			case 0 :
-				System.out.println(receiveData.substring(2));
-				Friends.analyseFriendsRequest(receiveData.substring(2));
-				break;
-			case 1 :
-				//Réponse amis + envoi liste d'amis + status
-				break;
-			case 2 :
-				//Refus
-				break;
-			case 3 :
-				//Demande liste d'amis
-				break;
-			case 4 :
-				//Envoi liste d'amis
-				break;
-			}
-			break;
-		case 3 :
-			switch(o2){
-			case 0 :
-				//Demande status
-				break;
-			case 1 :
-				//Envoi status
-				break;
-			}
-			break;
-		case 4 :
-			switch(o2){
-			case 0 :
-				//image status
-				break;
-			case 1:
-				//image profile
-				break;
-			}
-			break;	
-		}
-	}
-
-	public static void createSocket(InetAddress address, String data){
-		try{
-			Socket s = new Socket(address, port);
-			OutputStream os = s.getOutputStream();
-			PrintStream ps = new PrintStream(os, false, "utf-8");
-			ps.println(data);
-			ps.flush();
-			ps.close();
-			s.close();
-		}catch (Exception e){}
+		String so1 = receiveData.substring(0, 2);
+		int req = Integer.parseInt(so1);
+		Protocole.treatmentProtocol(req, receiveData.substring(2));
 	}
 }

@@ -128,9 +128,6 @@ public class XmlTreatment {
 		date.setText(newStatus.getDate());
 		status.addContent(date);
 		
-		Element comment= new Element("commentary");
-		status.addContent(comment);
-		
 		saveFile("statusList.xml");
 		
 	}
@@ -145,10 +142,10 @@ public class XmlTreatment {
 		Iterator i = listTmp.iterator();
 		while(i.hasNext()){
 			Element courant = (Element)i.next();
-			if(s_Date.equals(courant.getChild("name").getText())){
-
+			if(s_Date.equals(courant.getChild("date").getText())){
+				
 				Element comment = new Element("commentary");
-				racine.addContent(comment);
+				courant.addContent(comment);
 				
 				Element owner = new Element("owner");
 				owner.setText(c_Owner);

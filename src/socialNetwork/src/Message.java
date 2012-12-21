@@ -1,46 +1,43 @@
 package socialNetwork.src;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import socialNetwork.Main;
 
 public class Message {
-	
-	public static void connect(InetAddress address){
-		Serveur.createSocket(address, "00");
-	}
-	
-	public static void postStatus(String status, InetAddress address){
-		String data = "10" + status;
-		Serveur.createSocket(address,data);
-	}
-		
-	public static void postComment(String comment, InetAddress address){
-		String data = "11" + comment;
-		Serveur.createSocket(address,data);
-	}	
-	
-	public static void friendsRequest(InetAddress address){
-		try{
-		String data = "20" + System.getProperty("user.name") + "_&§&_" + InetAddress.getLocalHost().getHostName();
-		Serveur.createSocket(address, data);
-		}catch(Exception e){}
-	}
 
-	public static void friendsAnswer(String host, String dataToSend, boolean friends){
-		String data;
-		if(friends)
-			data = "21" + dataToSend;
-		else
-			data = "22" + dataToSend;
+	public static void connect(InetAddress address){
 		try {
-			Serveur.createSocket(InetAddress.getByName(host), data);
+			String data = Main.userName+"##"+InetAddress.getLocalHost().toString();
+			Protocole.send("00", data,address);
 		} catch (Exception e) {}
 	}
 
-	public static void friendsStatusImage(InetAddress address){
-		Serveur.createSocket(address, "40");
+	public static void postStatus(String status, InetAddress address){
+		Protocole.send("10", status, address);
 	}
-	
-	public static void friendsProfileImage(InetAddress address){
-		Serveur.createSocket(address, "41");
+
+	public static void postComment(String comment, InetAddress address){
+		Protocole.send("11", comment, address);
+	}	
+
+	public static void friendsRequest(String data, InetAddress address){
+		Protocole.send("20", data, address);
+	}
+
+	public static void friendsAnswer(InetAddress address, String dataToSend, boolean friends){
+		if(friends)
+			Protocole.send("21",  dataToSend, address);
+		else
+			Protocole.send("22",  dataToSend, address);
+	}
+
+	public static void friendsStatusImage(String data, InetAddress address){
+		Protocole.send("40",  data, address);
+	}
+
+	public static void friendsProfileImage(String data, InetAddress address){
+		Protocole.send("41",  data, address);
 	}
 }

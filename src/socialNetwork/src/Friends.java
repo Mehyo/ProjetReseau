@@ -1,8 +1,12 @@
 package socialNetwork.src;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.StringTokenizer;
 
+import socialNetwork.Main;
 import socialNetwork.src.Status;
 
 public class Friends{
@@ -10,8 +14,7 @@ public class Friends{
 	private String name;
 	private String host;
 	private boolean status;
-	private ArrayList<Friends> ListOfFriend;
-	
+
 	public static ArrayList<Friends> friendList = new ArrayList<Friends>();
 
 	/**
@@ -27,7 +30,6 @@ public class Friends{
 			this.status = false;
 		else
 			this.status = true;
-		this.ListOfFriend = new ArrayList<Friends>();
 	}
 
 	/**
@@ -37,7 +39,6 @@ public class Friends{
 		this.name = "";
 		this.host = "";
 		this.status = false;
-		this.ListOfFriend = new ArrayList<Friends>();
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class Friends{
 	}
 
 	/**
-	 * Défini l'addressed d'un ami.
+	 * Défini l'addresse d'un ami.
 	 * @param host L'addresse de l'ami.
 	 */
 	public void setHost(String host){
@@ -57,20 +58,23 @@ public class Friends{
 	}
 
 	/**
-	 * @return Le nom d'un ami.
+	 * Retourne le nom d'un ami.
+	 * @return Le nom de l'ami.
 	 */
 	public String getName(){
 		return this.name;
 	}
 
 	/**
-	 * @return L'addresse d'un ami.
+	 * Retourne l'addresse d'un ami.
+	 * @return L'addresse de l'ami.
 	 */
 	public String getHost(){
 		return this.host;
 	}
 
 	/**
+	 * Retourne le status de l'ami.
 	 * @return Le status de l'ami.
 	 */
 	public boolean getStatus(){	
@@ -94,10 +98,11 @@ public class Friends{
 	}
 
 	/**
-	 * @retrun Une chaine de caractère contenant le nom et l'addresse d'un ami.
+	 * Retroune  Une chaine de caractère contenant le nom et l'addresse d'un ami.
+	 * @return La chaine de caractère.
 	 */
 	public String toString(){
-		return "[" + this.name + "," + this.host +"]";
+		return "##" + this.name + "##" + this.host;
 	}
 
 	/**
@@ -107,24 +112,40 @@ public class Friends{
 	public static void AcceptFriend(String name){
 		for(int i=0; i < friendList.size(); i++){
 			if(friendList.get(i).getName().equals(name) && friendList.get(i).getStatus() == false){
-				friendList.get(i).answerFriendRequest();
+				friendList.get(i).setToFriend();
+				friendList.get(i).informFriend(true);
 				break;
 			}
 		}
 	}
 
+	public void informFriend(boolean state){
+		this.answerFriendRequest(state);
+	}
+	
+	
+	/**
+	 * Crée et envoi les données d'une requête amis.
+	 * @param address L'adresse du destinataire
+	 */
+	public static void sendRequest(InetAddress address){
+		String data = null;
+		try {
+			data = Main.userName +"##"+InetAddress.getLocalHost();
+		}catch (UnknownHostException e) {}
+		
+		for(int i = 0; i < friendList.size(); i++){
+			data += "##"+friendList.get(i).getName() + "##" + friendList.get(i).getHost();
+		}
+		Message.friendsRequest(data, address);
+	}
+	
 	/**
 	 * Analyse une demande d'ami reçu.
-	 * @param request La requête.
+	 * @param dataTable La requête.
 	 */
-	public static void analyseFriendsRequest(String request){
-		Friends newFriend = new Friends();
-		StringTokenizer stringT = new StringTokenizer(request, "_&§&_");		
-
-		newFriend.setName(stringT.nextToken());
-		newFriend.setHost(stringT.nextToken());
-		newFriend.setToFriend();
-
+	public static void analyseFriendsRequest(Hashtable<String, String> dataTable){
+		Friends newFriend = new Friends(dataTable.get("NewFriendName"), dataTable.get("NewFriendHost"), "false");		
 		if(friendList.size() == 0)
 			friendList.add(newFriend);
 		else{
@@ -133,11 +154,29 @@ public class Friends{
 					friendList.add(newFriend);
 			}
 		}
-
-		//		try {
-		//			XmlTreatment.addFriendXML(newFriends);
-		//		} catch (Exception e) {}
+		for(int i = 2; i <dataTable.size();i++)
+			for(int j = 0; j < friendList.size(); i++)
+				if(!dataTable.get("Friend"+i+"Name").equals(friendList.get(j))){
+					newFriend.setName(dataTable.get("Friend"+i+"Name"));
+					newFriend.setHost(dataTable.get("Friend"+i+"Host"));
+					friendList.add(newFriend);
+				}
+		try {
+			XmlTreatment.addFriendXML(newFriend);
+		} catch (Exception e) {}
 	}
+
+	public static void analyseFriendAnswer(String FriendName, int answer){
+		Friends friend = new Friends();
+		for(int i = 0; i < friendList.size(); i++)
+			if(friendList.get(i).equals(FriendName))
+				friend = friendList.get(i);
+		if(answer == 1)
+			friend.setToFriend();
+		else
+			friend.setToStranger();
+	}
+
 
 	/**
 	 * Génére la liste d'ami à partir d'un fichier de configuration.
@@ -149,56 +188,27 @@ public class Friends{
 	private static String contentFriendList(){
 		String content = "";
 		for(int i=0; i < friendList.size(); i ++)
-			content = friendList.get(i).toString();
+			content += friendList.get(i).toString()+"##";
 		return content;
 	}
 
-	private static String contentStatus(boolean type){
-		String content = null;
-		if(type)
-			for(int i=0; i < Status.listStatus.size(); i ++)
-				content = Status.listStatus.get(i).toString();
-		else
-			for(int i=0; i < Status.listStatus.size(); i ++){
-				if(Status.listStatus.get(i).getType() == "public")
-					content = Status.listStatus.get(i).toString();
-			}
-		return content;
+	private void answerFriendRequest(boolean state){
+		try{
+			String dataToSend;
+			dataToSend = Main.userName + contentFriendList();
+			Message.friendsAnswer(InetAddress.getByName(this.getHost()), dataToSend, this.getStatus());
+			if(state)
+				Status.sendAllStatus(InetAddress.getByName(this.getHost()), 1);
+			else
+				Status.sendAllStatus(InetAddress.getByName(this.getHost()), 0);
+		}catch(Exception e){ e.toString(); }
 	}
 
-
-	private void answerFriendRequest(){
-		this.setToFriend();
-		//Change in xml
-		String dataToSend;
-		if(this.getStatus())
-			dataToSend = System.getProperty("user.name") + contentFriendList() + contentStatus(true);
-		else
-			dataToSend = System.getProperty("user.name") + contentFriendList() + contentStatus(false);
-		Message.friendsAnswer(this.getHost(), dataToSend, this.getStatus());
-	}
-
-	private static Friends findFriend(String name){
+	public static Friends findFriend(String name){
 		for(int i =0; i < friendList.size();i++){
 			if(friendList.get(i).getName().equals((String) name))
 				return friendList.get(i);
 		}
 		return null;
-	}
-
-	private static void getFriendData(String dataSend){
-		StringTokenizer st1 = new StringTokenizer(dataSend, "_&§&_");
-		Friends friend = findFriend(st1.nextToken());
-		
-		StringTokenizer st2 = new StringTokenizer(st1.nextToken(), "_§§_");
-		for(int j=0; j < st2.countTokens();j++){
-			StringTokenizer st3 = new StringTokenizer(st2.nextToken(), "_o/");
-			friend.ListOfFriend.add(new Friends(st3.nextToken(), st3.nextToken(), "false"));
-		}
-		
-		StringTokenizer st3 = new StringTokenizer(st1.nextToken(),"{");
-		for(int i =0; i < st3.countTokens();i++){
-			//affiche Status friend.getName() et affiche commentaire associé.
-		}
 	}
 }

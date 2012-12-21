@@ -6,6 +6,12 @@
   </me>
   <friend>
     <name>amiviell</name>
+    <host>bourhis</host>
+    <friendStatus>true</friendStatus>
+    <picture>none</picture>
+  </friend>
+  <friend>
+    <name>amiviell</name>
     <host>bowmore</host>
     <friendStatus>false</friendStatus>
     <picture>none</picture>
@@ -18,7 +24,7 @@
   </friend>
   <friend>
     <name>ysenel</name>
-    <host>cezanne</host>
+    <host>moy</host>
     <friendStatus>true</friendStatus>
     <picture>none</picture>
   </friend>

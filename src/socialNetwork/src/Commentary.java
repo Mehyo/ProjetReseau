@@ -1,6 +1,7 @@
 package socialNetwork.src;
 
 import java.net.InetAddress;
+import java.util.Hashtable;
 import java.util.StringTokenizer;
 
 import socialNetwork.Main;
@@ -120,35 +121,16 @@ public class Commentary {
 		return this.getcOwner()+":"+this.getcContent();
 	}
 	
-
-	private void analyseString(String dataSend){
-		StringTokenizer stringT = new StringTokenizer(dataSend, "_&§&_");
-		this.setsOwner(stringT.nextToken());
-		this.setsDate(stringT.nextToken());
-		this.setcOwner(stringT.nextToken());
-		this.setcContent(stringT.nextToken());
-	}
-
-
 	/**
-	 * Analyse les commentaires reçu d'autre personnes.
-	 * @param dataSend Les données reçues.
+	 * Récupère un commentaire envoyé et l'affiche et le rajoute à la liste des status si besoin.
+	 * @param dataTable
 	 */
-	public static void analyseCommentary(String dataSend){
-		Commentary comment = new Commentary();
-		comment.analyseString(dataSend);
-		comment.addToStatus();
+	public static void add(Hashtable<String, String> dataTable){
+		Commentary comment = new Commentary(dataTable.get("CommentName"), dataTable.get("Comment"), dataTable.get("StatusName"), dataTable.get("SatusDate"));
+		//comment.printComment();
+		if(comment.getsOwner().equals(Main.userName))
+			comment.addToStatus();
 	}
-
-	public static void add(Commentary comment){
-		comment.addToStatus();
-	}
-	private void addToStatus(){
-		if(this.getsOwner() == Main.userName)
-			XmlTreatment.addCommentary(this.getsDate(), this.getcOwner(), this.getcContent());
-		Interface.printCommentary(this);	
-	}
-
 
 	/**
 	 * Envoi un commentaire personnel aux amis.
@@ -163,4 +145,10 @@ public class Commentary {
 		} catch (Exception e) {}
 		
 	}
+	
+	private void addToStatus(){
+		XmlTreatment.addCommentary(this.getsDate(), this.getcOwner(), this.getcContent());
+		Interface.printCommentary(this);	
+	}
+
 }

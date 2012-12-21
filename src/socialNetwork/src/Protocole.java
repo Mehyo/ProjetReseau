@@ -1,102 +1,148 @@
 package socialNetwork.src;
 
-public abstract class Protocole {
-	
-	public void treatmentProtocol(int i, String dataSend){
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.*;
+
+public class Protocole {
+
+	private Protocole(){}
+
+	public static void treatmentProtocol(int reqcode, String dataReceived){
 		for(;;){
-			if(connect(i, dataSend)) break;
-			
-			if(statusSend(i, dataSend)) break;
-			
-			if(commentSend(i, dataSend)) break;
-			
-			if(friendRequest(i, dataSend)) break;
-			
-			if(friendYesAnswer(i, dataSend)) break;
-			
-			if(friendNoAnswer(i, dataSend)) break;
-			
-			if(imageStatus(i, dataSend)) break;
-			
-			if(imageProfile(i, dataSend)) break;
-			
-			if(errorMessage(i, dataSend)) break;
-			
-			sendErrorMessage(i);
+			if(connect(reqcode, dataReceived)) break;
+
+			if(statusReceived(reqcode, dataReceived)) break;
+
+			if(commentReceived(reqcode, dataReceived)) break;
+
+			if(friendRequest(reqcode, dataReceived)) break;
+
+			if(friendYesAnswer(reqcode, dataReceived)) break;
+
+			if(friendNoAnswer(reqcode, dataReceived)) break;
+
+			if(imageStatus(reqcode, dataReceived)) break;
+
+			if(imageProfile(reqcode, dataReceived)) break;
+
+			if(errorMessage(reqcode, dataReceived)) break;
+
+			sendErrorMessage("42 Poyo");
 			break;
 		}
 	}
-	
-	private boolean connect(int i, String dataSend){
-		if( i == 00){
-			//function
-			return true;
-		}
-		return false;
-	}
-	
-	private boolean statusSend(int i, String dataSend){
-		if (i == 10){
-			//function
-			return true;
-		}
-		return false;
-	}
-	private boolean commentSend(int i, String dataSend){
-		if (i == 11){
-			//function
-			return true;
-		}
-		return false;
-	}
-	private boolean friendRequest(int i, String dataSend){
-		if (i == 20){
-			//function
-			return true;
-		}
-		return false;
-	}
-	private boolean friendYesAnswer(int i, String dataSend){
-		if (i == 21){
-			//function
-			return true;
-		}
-		return false;
-	}
-	private boolean friendNoAnswer(int i, String dataSend){
-		if (i == 22){
-			//function
-			return true;
-		}
-		return false;
+
+	private static boolean connect(int reqcode, String dataReceived){
+		if(reqcode != 00)
+			return false;
+		Hashtable<String, String> dataTable = Splitter.connect(dataReceived);
+		Serveur.connect(dataTable.get("Name"), dataTable.get("Host"));
+		return true;
 	}
 
-	private boolean imageStatus(int i, String dataSend){
-		if (i == 40){
-			//function
-			return true;
+	private static boolean statusReceived(int reqcode, String dataReceived){
+		if (reqcode != 10)
+			return false;
+		Hashtable<String, String> dataTable = Splitter.status(dataReceived);
+		Status.printStatus(dataTable);
+		return true;
+	}
+
+	private static boolean commentReceived(int reqcode, String dataReceived){
+		if (reqcode != 11)
+			return false;
+		Hashtable<String, String> dataTable = Splitter.comment(dataReceived);
+		Commentary.add(dataTable);
+		return true;
+	}
+
+	private static boolean friendRequest(int reqcode, String dataReceived){
+		if (reqcode != 20)
+			return false;
+		Hashtable<String, String> dataTable = Splitter.friendRequest(dataReceived);
+		Friends.analyseFriendsRequest(dataTable);
+		return true;
+	}
+
+	private static boolean friendYesAnswer(int reqcode, String dataReceived){
+		if (reqcode != 21)
+			return false;
+		Hashtable<String, String> dataTable = Splitter.friendResponse(dataReceived);
+		Friends.analyseFriendAnswer(dataTable.get("Name"), 1);
+		return true;
+	}
+
+	private static boolean friendNoAnswer(int reqcode, String dataReceived){
+		if (reqcode != 22)
+			return false;
+		Hashtable<String, String> dataTable = Splitter.friendResponse(dataReceived);
+		Friends.analyseFriendAnswer(dataTable.get("Name"), 0);
+		return true;
+	}
+
+	private static boolean imageStatus(int reqcode, String dataReceived){
+		if (reqcode != 40)
+			return false;
+		Hashtable<String, String> dataTable = Splitter.image(dataReceived);
+		//A faire
+		return true;
+	}
+
+	private static boolean imageProfile(int reqcode, String dataReceived){
+		if (reqcode != 41)
+			return false;
+		Hashtable<String, String> dataTable = Splitter.image(dataReceived);
+		//A faire
+		return true;
+	}
+
+	private static boolean errorMessage(int reqcode, String dataReceived){
+		if (reqcode != 99)
+			return false;
+		Hashtable<String, String> dataTable = Splitter.errorMessage(dataReceived);
+		//a faire
+		return true;
+	}
+
+	private static void sendErrorMessage(String error){
+		send("99", error, null);
+	}
+
+	public static void send(String reqcode, String req, InetAddress address){
+		int ok=0;
+		System.out.println(Serveur.connectList.toString());
+		for(int i = 0; i < Serveur.connectList.size();i++){
+			if(Serveur.connectList.get(i).equals(address)){
+				ok = 1;
+				break;
+			}
 		}
-		return false;
-	}
-	private boolean imageProfile(int i, String dataSend){
-		if (i == 41){
-			//function
-			return true;
+		System.out.println(ok);
+		if(ok == 0){
+			return;
 		}
-		return false;
+		try{
+			sendData(reqcode, req, address);
+		}catch (Exception e){ 
+			Serveur.connectList.remove(address);
+			}
 	}
-	private boolean errorMessage(int i, String dataSend){
-		if (i == 99){
-			//function
-			return true;
-		}
-		return false;
+
+	public static void sendData(String reqcode, String req, InetAddress address) //Fonction qui va envoyer [reqcode]+[req] à l'adresse address
+	{
+		System.out.println(reqcode + req + address.toString());
+		try{
+			Socket s = new Socket(address, Serveur.port);
+			OutputStream os = s.getOutputStream();
+			PrintStream ps = new PrintStream(os, false, "utf-8");
+			ps.println(reqcode+req);
+			ps.flush();
+			ps.close();
+			s.close();
+		}catch (Exception e){System.out.println("caca");Serveur.connectList.remove(address);}
+
 	}
-	
-	private void sendErrorMessage(int i){
-		String error =  "Erreur: le cas "+i+" n'est pas traité.";
-		//Function d'envoi 
-	}
-	
-	
 }
