@@ -28,8 +28,6 @@ import javax.swing.Box;
 import javax.swing.Box.Filler;
 import javax.swing.SwingUtilities;
 
-
-
 import socialNetwork.Main;
 import socialNetwork.src.Commentary;
 import socialNetwork.src.Friends;
@@ -40,29 +38,41 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
 
+/**
+ * Gère l'interface du programme.
+ *
+ */
 public class Interface extends JFrame {
 
 	static JPanel contentPane, panel, fPanel, me, him;
 	private JTextField txtStatus, friendText;
 
+	/**
+	 * Démare l'interface.
+	 */
 	public Interface() {
 		initInterface();
 	}
 
+	/**
+	 * Affiche un commentaire. (Non fonctionnel)
+	 * @param comment Le commentaire.
+	 */
 	public static void printCommentary(Commentary comment){
 		/**/
 	}
 
+	/**
+	 * Affiche un nouveau statuts.
+	 * @param status Le status.
+	 */
 	public void himStatus(String status){
 		JLabel label = new JLabel(status);
 		him.add(label);
 		panel.revalidate();
 	}
-
-	/**111 17
-	 * Create the frame.
-	 */
-	public final void initInterface() {
+	
+	private final void initInterface() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 400);
 		contentPane = new JPanel();

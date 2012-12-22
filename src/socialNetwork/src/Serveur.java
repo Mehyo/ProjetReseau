@@ -19,6 +19,9 @@ import socialNetwork.ui.Interface;
 import socialNetwork.src.Friends;
 import socialNetwork.src.Message;
 
+/**
+ * Gère l'écoute et l'attente de message d'amis.
+ */
 public class Serveur {
 
 	public static final int port = 5234;
@@ -27,12 +30,18 @@ public class Serveur {
 
 	public Serveur(){}
 
+	/**
+	 * Demarre le programme d'écoute et l'interface.
+	 */
 	public void run(){
 		ex = new Interface();
 		ex.setVisible(true);
 		listener();
 	}
 
+	/**
+	 * Envoi le message "connect" à tout les amis enregistrer. 
+	 */
 	public static void connect(){
 		initConnect();
 		for(int i = 0; i < Friends.friendList.size(); i++){
@@ -42,11 +51,15 @@ public class Serveur {
 		}		
 	}
 
+	/**
+	 * Passe le status de l'ami dont le nom est passé en paramètre de non connecté à connecté. 
+	 * @param name Le nom de l'ami.
+	 * @param host Son adresse.
+	 */
 	public static void connect(String name, String host){
-		System.out.println(host);
 		try{
 			connectList.add(InetAddress.getByName(host));
-		}catch(Exception e){System.out.println("caca");}
+		}catch(Exception e){}
 		Friends friend = Friends.findFriend(name);
 		friend.informFriend(friend.getStatus());
 	}
@@ -58,6 +71,9 @@ public class Serveur {
 		}catch(Exception e){}
 	}
 
+	/**
+	 * La fonction d'écoute qui attend les messages en provenance des autres utilisateurs. 
+	 */
 	public void listener(){
 
 		try{

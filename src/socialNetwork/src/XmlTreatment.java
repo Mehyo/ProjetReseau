@@ -13,18 +13,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
+/**
+ * Traite les intéractions avec les fichiers de sauvegardes XML.
+ *
+ */
 public class XmlTreatment {
 
-	static Element racine = new Element("personnes");
-	static org.jdom2.Document document = new Document(racine);
+	private static Element racine = new Element("personnes");
+	private static org.jdom2.Document document = new Document(racine);
 
-	static void readFileXML(String fichier) throws Exception{
+	private static void readFileXML(String fichier) throws Exception{
 		SAXBuilder sxb = new SAXBuilder();
 		document = sxb.build(new File(fichier));
 		racine = document.getRootElement();
 	}
 	
-	static void saveFile(String fichier){
+	
+	private static void saveFile(String fichier){
 		try{
 			XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
 			sortie.output(document, new FileOutputStream(fichier));
@@ -32,6 +37,9 @@ public class XmlTreatment {
 		catch(java.io.IOException e){}
 	}
 
+	/**
+	 * Récupère le nom d'utilisateur défini dans le fichier friendList.xml.
+	 */
 	public static void setUserName(){
 		try{
 			readFileXML("friendList.xml");
@@ -54,7 +62,10 @@ public class XmlTreatment {
 		}
 	}
 	
-	/*Récupération liste d'amis*/
+	
+	/**
+	 * Récupère la liste des amis stocké dans le fichier de sauvegarde.
+	 */
 	public static void getFriendsXML(){
 		try {
 			readFileXML("friendList.xml");
@@ -68,6 +79,10 @@ public class XmlTreatment {
 		} catch (Exception e) {}
 	}
 
+	/**
+	 * Ajoute un nouvel ami dans le fichier de sauvegarde.
+	 * @param newFriends Le nouvel ami.
+	 */
 	public static void addFriendXML(Friends newFriends){
 		try{
 		readFileXML("friendList.xml");
@@ -95,6 +110,9 @@ public class XmlTreatment {
 		saveFile("friendList.xml");
 	}
 	
+	/**
+	 * Récupère la liste des status stocké dans le fichier de sauvegarde.
+	 */
 	public static void getStatusXML(){
 		try {
 			readFileXML("statusList.xml");
@@ -108,6 +126,10 @@ public class XmlTreatment {
 		} catch (Exception e) {}
 	}
 	
+	/**
+	 *  * Ajoute un nouveau statuts dans le fichier de sauvegarde.
+	 * @param newStatus Le nouveau statuts.
+	 */
 	public static void addStatusXML(Status newStatus){
 		try{
 			readFileXML("statusList.xml");
@@ -132,6 +154,12 @@ public class XmlTreatment {
 		
 	}
 	
+	/**
+	 * Ajoute un commentaire à l'un des statuts sauvegardé.
+	 * @param s_Date La date du statuts.
+	 * @param c_Owner Le nom du propriétaire du commentaire.
+	 * @param c_Content Le contenu du commentaire.
+	 */
 	public static void addCommentary(String s_Date, String c_Owner,	String c_Content) {
 		try{
 			readFileXML("statusList.xml");
@@ -158,8 +186,6 @@ public class XmlTreatment {
 				break;
 			}
 		}	
-		
-		
 		saveFile("statusList.xml");
 	}
 }

@@ -6,7 +6,7 @@ import java.util.*;
  * Uses String.Split() to split the data according to the formatting defined by the protocol. Each method being linked
  * to a particular formatting.
  *
- * @author aquaj
+ * @author Xhitaquaj
  *
  */
 public class Splitter {

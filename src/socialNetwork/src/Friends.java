@@ -9,6 +9,9 @@ import java.util.StringTokenizer;
 import socialNetwork.Main;
 import socialNetwork.src.Status;
 
+/**
+ *Traite l'ajout et la création d'amis.
+ */
 public class Friends{
 
 	private String name;
@@ -98,7 +101,7 @@ public class Friends{
 	}
 
 	/**
-	 * Retroune  Une chaine de caractère contenant le nom et l'addresse d'un ami.
+	 * Retourne  Une chaine de caractère contenant le nom et l'addresse d'un ami.
 	 * @return La chaine de caractère.
 	 */
 	public String toString(){
@@ -166,6 +169,11 @@ public class Friends{
 		} catch (Exception e) {}
 	}
 
+	/**
+	 * Analyse la réponse à une requête d'ami.
+	 * @param FriendName Le nom de l'ami répondant.
+	 * @param answer Oui ou non.
+	 */
 	public static void analyseFriendAnswer(String FriendName, int answer){
 		Friends friend = new Friends();
 		for(int i = 0; i < friendList.size(); i++)
@@ -183,6 +191,19 @@ public class Friends{
 	 */
 	public static void createFriendsList(){
 		XmlTreatment.getFriendsXML();
+	}
+	
+	/**
+	 * Trouve un ami via son nom dans la liste des amis.
+	 * @param name Le nom de l'ami.
+	 * @return L'ami ou null si rien n'est trouvé.
+	 */
+	public static Friends findFriend(String name){
+		for(int i =0; i < friendList.size();i++){
+			if(friendList.get(i).getName().equals((String) name))
+				return friendList.get(i);
+		}
+		return null;
 	}
 
 	private static String contentFriendList(){
@@ -204,11 +225,4 @@ public class Friends{
 		}catch(Exception e){ e.toString(); }
 	}
 
-	public static Friends findFriend(String name){
-		for(int i =0; i < friendList.size();i++){
-			if(friendList.get(i).getName().equals((String) name))
-				return friendList.get(i);
-		}
-		return null;
-	}
 }

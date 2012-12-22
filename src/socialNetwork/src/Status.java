@@ -11,6 +11,9 @@ import java.util.StringTokenizer;
 import socialNetwork.Main;
 import socialNetwork.src.Message;
 
+/**
+ *Traite l'ajout et la création de statuts.
+ */
 public class Status {
 
 	private String sContent;
@@ -21,7 +24,7 @@ public class Status {
 	public static ArrayList<Status> listStatus = new ArrayList<Status>();
 
 	/**
-	 * Crée un nouveau status à partir des champs spécifié.
+	 * Crée un nouveau statuts à partir des champs spécifié.
 	 * @param owner Propriétaire.
 	 * @param content Contenu.
 	 * @param date Date.
@@ -37,7 +40,7 @@ public class Status {
 	}
 
 	/**
-	 * Crée un nouveau status public sans commentaire.
+	 * Crée un nouveau statuts public sans commentaire.
 	 * @param owner Propriétaire.
 	 * @param content Contenu.
 	 * @param date Date.
@@ -50,7 +53,7 @@ public class Status {
 	}
 
 	/**
-	 * Crée un nouveau status public vide.
+	 * Crée un nouveau statuts public vide.
 	 */
 	public Status(){
 		this.sContent = "";
@@ -61,7 +64,7 @@ public class Status {
 
 
 	/**
-	 * Défini le propriétaire d'un status.
+	 * Défini le propriétaire d'un statuts.
 	 * @param owner Nom du propriétaire.
 	 */
 	public void setOwner(String owner){
@@ -69,31 +72,31 @@ public class Status {
 	}
 
 	/**
-	 * Défini le contenu d'un status.
-	 * @param content Contenu du status.
+	 * Défini le contenu d'un statuts.
+	 * @param content Contenu du statuts.
 	 */
 	public void setContent(String content){
 		this.sContent = content;
 	}
 
 	/**
-	 * Défini la date d'un status.
-	 * @param date Date du status.
+	 * Défini la date d'un statuts.
+	 * @param date Date du statuts.
 	 */
 	public void setDate(String date){
 		this.sDate = date;
 	}
 
 	/**
-	 * Défini le type d'un status.
-	 * @param type Type du status (Public/Privé)
+	 * Défini le type d'un statuts.
+	 * @param type Type du statuts (Public/Privé)
 	 */
 	public void setType(String type){
 		this.sType = type;
 	}
 
 	/**
-	 * Défini un commentaire pour le status.
+	 * Défini un commentaire pour le statuts.
 	 * @param owner Nom du propriétaire du commentaire.
 	 * @param content Contenu du commentaire.
 	 */
@@ -102,34 +105,39 @@ public class Status {
 	}
 
 	/**
-	 * @return Nom du propriétaire du status.
+	 * Retourne le nom du propriétaire du statuts.
+	 * @return Le nom du propriétaire.
 	 */
 	public String getOwner(){
 		return this.sOwner;
 	}
 
 	/**
-	 * @return Contenu du status.
+	 * Retourne le contenu du statuts.
+	 * @return Contenu du statuts.
 	 */
 	public String getContent(){
 		return this.sContent;
 	}
 
 	/**
-	 * @return Date du status
+	 * Retourne la date du statuts.
+	 * @return Date du statuts
 	 */
 	public String getDate(){
 		return this.sDate;
 	}
 
 	/**
-	 * @return Type du status.
+	 * Retourne le type du statuts (Public ou privé).
+	 * @return Type du statuts.
 	 */
 	public String getType(){
 		return this.sType;
 	}
 
 	/**
+	 * Retourne la liste des commentaires associé au statuts.
 	 * @return Liste des commentaires.
 	 */
 	public ArrayList<Commentary> getCommentary(){
@@ -137,7 +145,8 @@ public class Status {
 	}
 
 	/**
-	 * @return Chaine de caractère contenant toute les informations sur le status.
+	 * Retourne la chaine de caractère contenant toute les informations sur le statuts.
+	 * @return La chaine de caractère.
 	 */
 	public String toString(){
 		String status = "{"+ this.getDate()+ "_§§_" + this.getContent() + "_&&_";
@@ -147,9 +156,9 @@ public class Status {
 	}
 
 	/**
-	 * Crée et envoi un nouveau status à tout les amis.
-	 * @param content
-	 * @param publicStatus
+	 * Crée et envoi un nouveau statuts à tout les amis.
+	 * @param content Contenu du status.
+	 * @param publicstatus Le type de status.
 	 */
 	public static void createNewStatus(String content, boolean publicStatus){
 		DateFormat dateFormat = new SimpleDateFormat("[dd/MM/yyyy][HH:mm:ss]");
@@ -166,7 +175,7 @@ public class Status {
 	}
 
 	/**
-	 * Envoi tout les status contenu dans la liste des status.
+	 * Envoi tout les statuts contenu dans la liste des statuts.
 	 * @param address Adresse du destinataire.
 	 * @param type Etat (Amis/Etranger)
 	 */
@@ -182,6 +191,10 @@ public class Status {
 		}
 	}
 
+	/**
+	 * Ajoute un status à la sauvegarde XML.
+	 * @param status Le status.
+	 */
 	public static void add(Status status){
 		addStatus(status);
 	}
@@ -207,15 +220,15 @@ public class Status {
 	}
 
 	/**
-	 * Génére la liste des status depuis le fichier de stockage. 
+	 * Génére la liste des statuts depuis le fichier de stockage. 
 	 */
 	public static void createListeStatus(){
-		/*Xml import */
+		XmlTreatment.getStatusXML();
 	}
 
 	/**
 	 * Affiche un nouveau status dans l'interface.
-	 * @param newStatus Le nouveau status.
+	 * @param newStatus Le nouveau statuts.
 	 */
 	public static void printStatus(Hashtable<String, String> dataTable){
 		Serveur.ex.himStatus("[" + dataTable.get("Date")+"]"+ dataTable.get("Name") + ">" + dataTable.get("Status"));

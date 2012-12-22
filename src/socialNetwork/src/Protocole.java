@@ -6,10 +6,18 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.*;
 
+/**
+ * Traite l'ensemble des données reçues.
+ */
 public class Protocole {
 
-	private Protocole(){}
+	protected Protocole(){}
 
+	/**
+	 * Traite les données reçu suivant reqcode et appelle la bonne fonction de traitement en suivant.
+	 * @param reqcode Le type de données.
+	 * @param dataReceived Les données reçus.
+	 */
 	public static void treatmentProtocol(int reqcode, String dataReceived){
 		for(;;){
 			if(connect(reqcode, dataReceived)) break;
@@ -111,7 +119,7 @@ public class Protocole {
 		send("99", error, null);
 	}
 
-	public static void send(String reqcode, String req, InetAddress address){
+	protected static void send(String reqcode, String req, InetAddress address){
 		int ok=0;
 		System.out.println(Serveur.connectList.toString());
 		for(int i = 0; i < Serveur.connectList.size();i++){
@@ -131,7 +139,7 @@ public class Protocole {
 			}
 	}
 
-	public static void sendData(String reqcode, String req, InetAddress address) //Fonction qui va envoyer [reqcode]+[req] à l'adresse address
+	private static void sendData(String reqcode, String req, InetAddress address) //Fonction qui va envoyer [reqcode]+[req] à l'adresse address
 	{
 		System.out.println(reqcode + req + address.toString());
 		try{

@@ -7,6 +7,9 @@ import java.util.StringTokenizer;
 import socialNetwork.Main;
 import socialNetwork.ui.Interface;
 
+/**
+ * Traite l'ajout et la création de commentaires.
+ */
 public class Commentary {
 
 	private String cOwner;
@@ -80,42 +83,48 @@ public class Commentary {
 	}
 
 	/**
-	 * @return Le propriétaire du commentaire.
+	 * Retourne le nom du propriétaire du commentaire.
+	 * @return Le nom du propiétaire.
 	 */
 	public String getcOwner(){
 		return this.cOwner;
 	}
 
 	/**
-	 * @return Le propriétaire du commentaire.
+	 * Retourne le contenu du commentaire.
+	 * @return Le contenu du commentaire.
 	 */
 	public String getcContent(){
 		return this.cContent;
 	}
 
 	/**
-	 * @return Le propriétaire du status auquel se rapporte le commentaire.
+	 * Retourne le propriétaire du status auquel se rapporte le commentaire.
+	 * @return Le propriétaire du status.
 	 */
 	public String getsOwner(){
 		return this.sOwner;
 	}
 
 	/**
-	 * @return La date du status auquel se rapporte le commentaire.
+	 * Retourne la date du status auquel se rapporte le commentaire.
+	 * @return La date du status.
 	 */
 	public String getsDate(){
 		return this.sDate;
 	}
 	
 	/**
-	 * @return Une chaine de caractère contenant propiétaire du status, la date du status, le propriétaire du commentaire, le contenu du commentaire.
+	 * Retourne une chaine de caractère contenant propiétaire du status, la date du status, le propriétaire du commentaire, le contenu du commentaire.
+	 * @return La chaine de caractère.
 	 */
 	public String toString(){
 		return this.getsOwner()+"&&"+this.getsDate()+"&&"+this.getcOwner()+"&&"+this.getcContent(); 
 	}
 	
 	/**
-	 * @return Une chaine de caractère contenant le nom du commenteur et le contenu du commentaire.
+	 * Retourne une chaine de caractère contenant le nom du commenteur et le contenu du commentaire.
+	 * @return La chaine de caractère.
 	 */
 	public String commentToString(){
 		return this.getcOwner()+":"+this.getcContent();
